@@ -25,8 +25,8 @@ TZ = 'America/Lima'
 ALIAS = {
     'document': ['document', 'documento', 'dni'],
     'origin': ['origin', 'origen'],
-    'landing_source': ['landingsource'],
-    'created': ['createdin', 'createdat', 'created', 'fecharegistro'],
+    'landing_source': ['landingsource', 'source'],
+    'created': ['createdin', 'createdon', 'createdat', 'created', 'fecharegistro'],
 }
 
 
@@ -47,13 +47,29 @@ def _mapear(columnas):
     return out
 
 
+def consulta(conn, sql, params=None):
+    with conn.cursor() as cur:
+        cur.execute(sql, params)
+        cols = [d[0] for d in cur.description]
+        return pd.DataFrame(cur.fetchall(), columns=cols)
+
+
 def leer(conn):
-    cols = pd.read_sql(f'SELECT * FROM "{TABLA}" LIMIT 0', conn).columns
+    cols = consulta(conn, f'SELECT * FROM "{TABLA}" LIMIT 0').columns
     m = _mapear(cols)
+    print('Columnas usadas:', m)
+    # Diagnóstico sin datos personales: valores de la columna de campaña
+    dx = consulta(conn, f'SELECT "{m["landing_source"]}" AS valor, count(*) AS n FROM "{TABLA}" '
+                        f'GROUP BY 1 ORDER BY 2 DESC LIMIT 15')
+    print('Valores de', m['landing_source'], ':', dx.to_dict('records'))
     q = (f'SELECT "{m["document"]}" AS document, "{m["origin"]}" AS origin, '
          f'"{m["created"]}" AS created FROM "{TABLA}" '
          f'WHERE "{m["landing_source"]}" = %(c)s')
-    return pd.read_sql(q, conn, params={'c': CAMPANA})
+    df = consulta(conn, q, {'c': CAMPANA})
+    print('Filas de la campaña', CAMPANA, ':', len(df))
+    if df.empty:
+        raise SystemExit(f'No hay filas con {m["landing_source"]} = "{CAMPANA}". Revisa los valores impresos arriba.')
+    return df
 
 
 def procesar(df, ahora=None):
@@ -115,7 +131,7 @@ if __name__ == '__main__':
     conn = psycopg2.connect(url, connect_timeout=30)
     try:
         if '--probar' in sys.argv:
-            cols = pd.read_sql(f'SELECT * FROM "{TABLA}" LIMIT 0', conn).columns.tolist()
+            cols = consulta(conn, f'SELECT * FROM "{TABLA}" LIMIT 0').columns.tolist()
             print('Columnas de', TABLA, ':', cols)
             print('Mapeo detectado:', _mapear(cols))
             sys.exit(0)
