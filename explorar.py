@@ -1,27 +1,50 @@
-"""Lista las tablas de PostgreSQL con sus columnas y filas aproximadas. No lee datos personales."""
+"""Diagnóstico de public.campaigns: solo conteos y valores de códigos de tienda. Sin datos personales."""
 import os
 import psycopg2
 
 conn = psycopg2.connect(os.environ['DATABASE_URL'], connect_timeout=30)
 cur = conn.cursor()
-cur.execute("""
-    SELECT c.table_schema, c.table_name, t.table_type,
-           string_agg(c.column_name, ', ' ORDER BY c.ordinal_position)
-    FROM information_schema.columns c
-    JOIN information_schema.tables t USING (table_schema, table_name)
-    WHERE c.table_schema NOT IN ('pg_catalog', 'information_schema')
-    GROUP BY 1, 2, 3 ORDER BY 1, 2
-""")
-filas = cur.fetchall()
-cur.execute("SELECT schemaname, relname, n_live_tup FROM pg_stat_user_tables")
-aprox = {(s, r): n for s, r, n in cur.fetchall()}
-print('=== TABLAS Y VISTAS ===')
-for s, t, tipo, cols in filas:
-    print(f'{s}.{t} [{tipo}] ~{aprox.get((s, t), "?")} filas: {cols}')
-print()
-print('=== CANDIDATAS (tienen landing_source o createdIn) ===')
-for s, t, tipo, cols in filas:
-    low = cols.lower().replace('_', '')
-    if 'landingsource' in low or 'createdin' in low:
-        print(f'{s}.{t} [{tipo}]')
+
+
+def q(sql, params=None):
+    cur.execute(sql, params)
+    return cur.fetchall()
+
+
+print('=== TIPOS DE COLUMNA ===')
+for c, t in q("SELECT column_name, data_type FROM information_schema.columns "
+              "WHERE table_schema='public' AND table_name='campaigns' ORDER BY ordinal_position"):
+    print(f'{c}: {t}')
+
+total = q('SELECT count(*) FROM public.campaigns')[0][0]
+print(f'\n=== TOTAL FILAS: {total} ===')
+
+print('\n=== FILAS NO VACÍAS POR COLUMNA ===')
+cols = [r[0] for r in q("SELECT column_name FROM information_schema.columns "
+                        "WHERE table_schema='public' AND table_name='campaigns' ORDER BY ordinal_position")]
+for c in cols:
+    n = q(f'SELECT count("{c}") FROM public.campaigns')[0][0]
+    print(f'{c}: {n}')
+
+print('\n=== created_on: rango ===')
+print(q('SELECT min(created_on), max(created_on) FROM public.campaigns'))
+
+print('\n=== VALORES DE source (top 15) ===')
+for v, n in q('SELECT source, count(*) FROM public.campaigns GROUP BY 1 ORDER BY 2 DESC LIMIT 15'):
+    print(f'{v!r}: {n}')
+
+print('\n=== origin: largo y valores más frecuentes ===')
+for l, n in q('SELECT length(origin), count(*) FROM public.campaigns GROUP BY 1 ORDER BY 2 DESC LIMIT 10'):
+    print(f'largo {l}: {n}')
+for v, n in q('SELECT origin, count(*) FROM public.campaigns GROUP BY 1 ORDER BY 2 DESC LIMIT 15'):
+    print(f'{v!r}: {n}')
+
+print('\n=== source x registros con origin de 3 letras ===')
+for v, n in q("SELECT source, count(*) FROM public.campaigns "
+              "WHERE length(origin)=3 AND lower(origin)<>'web' GROUP BY 1 ORDER BY 2 DESC LIMIT 15"):
+    print(f'{v!r}: {n}')
+
+print('\n=== created_on por mes ===')
+for m, n in q("SELECT to_char(created_on,'YYYY-MM'), count(*) FROM public.campaigns GROUP BY 1 ORDER BY 1"):
+    print(f'{m}: {n}')
 conn.close()
