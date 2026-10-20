@@ -1,0 +1,891 @@
+<title>Registrate y Gana en tiendas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+:root{--cds-radius:8px;--cds-gap-sm:8px;--cds-gap-md:14px;--cds-gap-lg:20px;--cds-pad-xs:6px;--cds-pad-sm:10px;--cds-pad-lg:18px;
+--cds-font-size-caption:12px;--cds-font-size-body:14px;--cds-font-size-heading:16px;--cds-font-size-title:28px;--cds-font-weight-medium:600;
+--font-anthropic-sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;--font-anthropic-serif:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+--brand-red:#E4002B;--brand-gold:#FFB500;--bg:#0b0b0c;--color-bg:#0b0b0c;--color-fg:#f5f5f5;--color-fg-muted:#a3a3a8;--color-panel:#151516;--color-border-line:#2a2a2c;
+--color-ok:#3dd68c;--color-warn:#ff9f43;--color-bad:#ff4d63;--series-1:#ffb500;
+--cds-chart-grid:#262628;--cds-chart-muted:#4a4a4e;--cds-chart-reference:#8e8e93;--cds-chart-status-neutral:#ffb500;
+--cds-surface-popover:#1d1d1f;--cds-border:#3a3a3d;--cds-text-secondary:#a3a3a8;--cds-shadow-popover:0 4px 14px rgba(0,0,0,.6);color-scheme:dark;}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f4f4f4;--color-bg:#f4f4f4;--color-fg:#0a0a0a;--color-fg-muted:#5e5e63;--color-panel:#ffffff;--color-border-line:#e1e1e1;
+--color-ok:#17824f;--color-warn:#b25e00;--color-bad:#e4002b;--series-1:#111111;
+--cds-chart-grid:#ebebeb;--cds-chart-muted:#c8c8cc;--cds-chart-reference:#8a8a8f;--cds-chart-status-neutral:#111111;
+--cds-surface-popover:#ffffff;--cds-border:#cfcfd3;--cds-text-secondary:#5e5e63;--cds-shadow-popover:0 4px 14px rgba(0,0,0,.16);color-scheme:light;}}
+:root[data-theme="light"]{--bg:#f4f4f4;--color-bg:#f4f4f4;--color-fg:#0a0a0a;--color-fg-muted:#5e5e63;--color-panel:#ffffff;--color-border-line:#e1e1e1;
+--color-ok:#17824f;--color-warn:#b25e00;--color-bad:#e4002b;--series-1:#111111;
+--cds-chart-grid:#ebebeb;--cds-chart-muted:#c8c8cc;--cds-chart-reference:#8a8a8f;--cds-chart-status-neutral:#111111;
+--cds-surface-popover:#ffffff;--cds-border:#cfcfd3;--cds-text-secondary:#5e5e63;--cds-shadow-popover:0 4px 14px rgba(0,0,0,.16);color-scheme:light;}
+body{background:var(--bg);color:var(--color-fg);font-family:var(--font-anthropic-sans);font-size:var(--cds-font-size-body);
+padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.rg{max-width:1280px;margin-inline:auto}
+.rg button:focus-visible,.rg select:focus-visible,.rg input:focus-visible{outline:2px solid var(--brand-gold);outline-offset:2px}
+.rg{display:flex;flex-direction:column;gap:var(--cds-gap-lg);font-family:var(--font-anthropic-sans);min-width:0}
+.rg *{box-sizing:border-box}
+.rg h1{font-family:var(--font-anthropic-serif);font-weight:400;font-size:var(--cds-font-size-title);margin:0;line-height:1.2}
+.rg h2{font-size:var(--cds-font-size-heading);font-weight:var(--cds-font-weight-medium);margin:0}
+.rg-take{margin:6px 0 0;color:var(--color-fg-muted);font-size:var(--cds-font-size-body);max-width:80ch}
+.rg-filters{display:flex;flex-wrap:wrap;gap:var(--cds-gap-md);align-items:flex-end}
+.rg-f{display:flex;flex-direction:column;gap:4px;min-width:0}
+.rg-f label{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.rg select,.rg input[type=search]{font:inherit;font-size:var(--cds-font-size-body);color:var(--color-fg);background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:6px 8px;min-width:9rem;max-width:100%}
+.rg-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr));gap:var(--cds-gap-md)}
+.rg-card{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:var(--cds-pad-lg);min-width:0;container-type:inline-size}
+.rg-kpi{display:flex;flex-direction:column;gap:4px}
+.rg-kpi .l{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.rg-kpi .v{font-family:var(--font-anthropic-serif);font-size:2rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.rg-kpi .n{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.rg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,24rem),1fr));gap:var(--cds-gap-md)}
+.rg-note{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin:2px 0 var(--cds-gap-sm)}
+.rg-chart{position:relative;min-height:250px}
+.rg-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.rg-chart text{fill:var(--color-fg-muted);font-size:11px;font-family:var(--font-anthropic-sans)}
+.rg-tip{position:absolute;pointer-events:none;background:var(--cds-surface-popover);border:1px solid var(--cds-border);border-radius:var(--cds-radius);box-shadow:var(--cds-shadow-popover);padding:var(--cds-pad-xs) var(--cds-pad-sm);font-size:var(--cds-font-size-caption);white-space:nowrap;z-index:5;display:none}
+.rg-tip .h{color:var(--cds-text-secondary)}
+.rg-leg{display:flex;flex-wrap:wrap;gap:14px;font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin-top:6px}
+.rg-leg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.rg-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--cds-gap-md);align-items:flex-start;margin-bottom:var(--cds-gap-sm)}
+.rg-seg{display:inline-flex;border:1px solid var(--color-border-line);border-radius:var(--cds-radius);overflow:hidden}
+.rg-seg button{font:inherit;font-size:var(--cds-font-size-caption);background:transparent;color:var(--color-fg-muted);border:0;padding:6px 12px;cursor:pointer}
+.rg-seg button[aria-pressed=true]{background:var(--color-fg);color:var(--color-bg)}
+.rg-tw{overflow:auto;max-height:540px;border-top:1px solid var(--color-border-line)}
+.rg table{border-collapse:collapse;width:100%;font-size:var(--cds-font-size-body);font-variant-numeric:tabular-nums}
+.rg th{position:sticky;top:0;background:var(--color-panel);text-align:right;font-weight:var(--cds-font-weight-medium);font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);padding:8px 10px;white-space:nowrap;border-bottom:1px solid var(--color-border-line)}
+.rg th.t,.rg td.t{text-align:left}
+.rg th button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+.rg th[aria-sort=ascending] button::after{content:" ↑"}
+.rg th[aria-sort=descending] button::after{content:" ↓"}
+.rg td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--color-border-line);white-space:nowrap}
+.rg td.t{white-space:normal;min-width:11rem}
+.rg td .c{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption);margin-right:6px}
+.rg-bar{display:inline-block;position:relative;width:90px;height:8px;border-radius:4px;background:var(--cds-chart-grid);vertical-align:middle;margin-right:8px;overflow:visible}
+.rg-bar b{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--cds-chart-status-neutral, currentColor)}
+.rg-bar s{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--color-fg);opacity:.6}
+.rg-st{display:inline-flex;align-items:center;gap:6px}
+.rg-st::before{content:"";width:.5rem;height:.5rem;border-radius:50%;background:currentColor}
+.rg-leg{list-style:none;margin:12px 4px 0;padding:0;display:grid;gap:6px;font-size:.82rem;color:var(--color-fg-muted)}.rg-leg .rg-st{font-weight:600;min-width:84px}
+.st-ok{color:var(--color-ok)}.st-warn{color:var(--color-warn)}.st-bad{color:var(--color-bad)}.st-na{color:var(--color-fg-muted)}
+.rg-bar.ok b{background:var(--color-ok)}.rg-bar.warn b{background:var(--color-warn)}.rg-bar.bad b{background:var(--color-bad)}.rg-bar.na b{background:var(--cds-chart-muted)}
+@container (max-width:780px){.rg .opt{display:none}}
+.rg-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr));gap:var(--cds-gap-lg);font-size:var(--cds-font-size-body)}
+.rg-notes ul{margin:6px 0 0;padding-left:1.1rem;color:var(--color-fg-muted)}
+.rg-notes li{margin-bottom:4px}
+.rg-mx td.n{min-width:3.2rem}
+.rg-mx th:first-child,.rg-mx td:first-child{position:sticky;left:0;background:var(--color-panel);z-index:1;text-align:left;min-width:12rem;white-space:normal}
+.rg-mx th:first-child{z-index:2}
+.rg-mx tr.sum td{font-weight:var(--cds-font-weight-medium);border-top:1px solid var(--color-border-line)}
+.rg-mx td.tot{font-weight:var(--cds-font-weight-medium)}
+.rg-mx td.e{color:var(--color-fg-muted)}
+[data-dash-source-state=empty]{color:transparent}
+.rg-hd{background:#000;color:#fff;border:1px solid var(--color-border-line);border-bottom:4px solid var(--brand-red);border-radius:var(--cds-radius);padding:20px 22px;position:relative;overflow:hidden}
+.rg-hd::after{content:"";position:absolute;left:0;bottom:-4px;width:72px;height:4px;background:var(--brand-gold)}
+.rg-hd h1{color:#fff}
+.rg-hd .rg-take{color:#d2d2d6}
+.rg-seg button[aria-pressed=true]{background:var(--brand-red);color:#fff}
+.rg [hidden]{display:none!important}
+.an-h{font-size:var(--cds-font-size-body);font-weight:var(--cds-font-weight-medium);margin:0 0 6px}
+.rg-chart svg .bar{cursor:pointer}
+</style>
+
+
+<div class="rg" id="rg-root">
+  <header class="rg-hd">
+    <h1>Registrate y Gana en tiendas</h1>
+    <p class="rg-take" id="rg-take">&nbsp;</p>
+    <p class="rg-take" id="rg-upd" style="font-size:12px;opacity:.8;margin-top:4px"></p>
+  </header>
+
+  <div class="rg-filters" id="rg-filters">
+    <div class="rg-f"><label for="f-mes">Mes</label><select id="f-mes"></select></div>
+    <div class="rg-f"><label for="f-zona">Zona</label><select id="f-zona"></select></div>
+    <div class="rg-f"><label for="f-zonal">Zonal</label><select id="f-zonal"></select></div>
+    <div class="rg-f"><label for="f-formato">Formato</label><select id="f-formato"></select></div>
+  </div>
+
+  <div class="rg-kpis" id="rg-kpis">
+    <div class="rg-card rg-kpi"><span class="l">Registros (DNI únicos)</span><span class="v" id="k-regs">—</span><span class="n" id="k-regs-n"></span></div>
+    <div class="rg-card rg-kpi"><span class="l">Promedio por día</span><span class="v" id="k-prom">—</span><span class="n" id="k-prom-n"></span></div>
+    <div class="rg-card rg-kpi mt"><span class="l">Meta del mes</span><span class="v" id="k-meta">—</span><span class="n" id="k-meta-n"></span></div>
+    <div class="rg-card rg-kpi mt"><span class="l">Avance sobre la meta</span><span class="v" id="k-cumpl">—</span><span class="n" id="k-cumpl-n"></span></div>
+    <div class="rg-card rg-kpi mt"><span class="l">Ritmo vs lo esperado a la fecha</span><span class="v" id="k-ritmo">—</span><span class="n" id="k-ritmo-n"></span></div>
+    <div class="rg-card rg-kpi mt"><span class="l">Proyección al cierre</span><span class="v" id="k-proy">—</span><span class="n" id="k-proy-n"></span></div>
+  </div>
+
+  <div class="rg-grid">
+    <section class="rg-card" id="c-diario">
+      <h2>Registros por día</h2>
+      <p class="rg-note" id="note-d"></p>
+      <div class="rg-chart" id="ch-diario"></div>
+      <div class="rg-leg"><span><i id="lg-a"></i><span id="lg-a-t">Día sobre la meta diaria</span></span><span id="lg-b-w"><i id="lg-b"></i>Día bajo la meta diaria</span></div>
+    </section>
+    <section class="rg-card" id="c-acum">
+      <h2>Acumulado contra la ruta a la meta</h2>
+      <p class="rg-note">La diagonal es lo esperado si la meta se reparte parejo todos los días del mes.</p>
+      <div class="rg-chart" id="ch-acum"></div>
+      <div class="rg-leg"><span><i id="lg-c"></i>Acumulado real</span><span><i id="lg-d" style="background:var(--cds-chart-reference)"></i>Ruta a la meta</span></div>
+    </section>
+  </div>
+
+  <section class="rg-card" id="c-grupo">
+    <div class="rg-head">
+      <div><h2>Avance por zona y zonal</h2><p class="rg-note" style="margin:2px 0 0" id="g-note"></p></div>
+      <div class="rg-seg" role="group" aria-label="Agrupar por">
+        <button type="button" id="v-zona" aria-pressed="true">Zona</button>
+        <button type="button" id="v-zonal" aria-pressed="false">Zonal</button>
+      </div>
+    </div>
+    <div class="rg-tw"><table id="t-grupo"></table></div>
+  </section>
+
+  <section class="rg-card" id="c-tiendas">
+    <div class="rg-head">
+      <div><h2>Tiendas</h2><p class="rg-note" style="margin:2px 0 0" id="t-note"></p></div>
+      <div class="rg-f"><label for="f-q">Buscar tienda</label><input type="search" id="f-q" placeholder="Código o nombre"></div>
+    </div>
+    <div class="rg-tw"><table id="t-tiendas"></table></div>
+    <ul class="rg-leg" id="t-leg" hidden>
+      <li><span class="rg-st st-ok">En meta</span> lleva al menos lo que debería llevar a la fecha para cumplir su meta del mes.</li>
+      <li><span class="rg-st st-warn">En riesgo</span> lleva entre el 70% y el 99% de lo que debería llevar a la fecha.</li>
+      <li><span class="rg-st st-bad">Rezagada</span> lleva menos del 70% de lo que debería llevar a la fecha; necesita reforzar para llegar a su meta.</li>
+      <li><span class="rg-st st-na">Sin meta</span> tienda cerrada, inactiva o sin meta asignada.</li>
+    </ul>
+  </section>
+
+  <section class="rg-card" id="c-anio">
+    <div class="rg-head">
+      <div><h2>Acumulado del año</h2><p class="rg-note" id="an-note" style="margin:2px 0 0"></p></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+        <div class="rg-seg" role="group" aria-label="Agrupar por">
+          <button type="button" id="an-zona" aria-pressed="true">Zona</button>
+          <button type="button" id="an-zonal" aria-pressed="false">Zonal</button>
+        </div>
+        <div class="rg-f"><label for="f-an">Ver evolución de</label><select id="f-an"></select></div>
+      </div>
+    </div>
+    <div class="rg-grid">
+      <div><h3 class="an-h" id="an-h1"></h3><div class="rg-chart" id="an-rank"></div></div>
+      <div>
+        <h3 class="an-h" id="an-h3"></h3><p class="rg-note" id="an-mnote" style="margin:0 0 4px"></p><div class="rg-chart" id="an-mes" style="min-height:250px"></div>
+        <h3 class="an-h" id="an-h2" style="margin-top:18px"></h3><div class="rg-chart" id="an-evo"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="rg-card" id="c-matriz">
+    <div class="rg-head">
+      <h2>Detalle por tienda y mes</h2>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+        <div class="rg-seg" role="group" aria-label="Vista">
+          <button type="button" id="mx-tabla" aria-pressed="true">Tabla</button>
+          <button type="button" id="mx-graf" aria-pressed="false">Gráfica</button>
+        </div>
+        <div class="rg-f" id="mx-qw"><label for="f-mq">Buscar tienda</label><input type="search" id="f-mq" placeholder="Código o nombre"></div>
+        <div class="rg-f" id="mx-tw" hidden><label for="f-mt">Tienda</label><select id="f-mt"></select></div>
+      </div>
+    </div>
+    <div class="rg-tw" id="mx-twrap"><table id="t-matriz" class="rg-mx"></table></div>
+    <div id="mx-gwrap" hidden>
+      <p class="rg-note" id="mx-ctitle"></p>
+      <div class="rg-chart" id="mx-chart"></div>
+    </div>
+  </section>
+
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+const STORE = {};
+const CALCS = [];
+const FUENTES = ['registros', 'tiendas', 'metas', 'matriz', 'matriz25'];
+window.dash = {
+  colors: ['var(--series-1)'],
+  data: (id) => ({status: STORE[id] ? 'ok' : 'missing', data: STORE[id] || []}),
+  calc: (id, o) => { CALCS.push([id, o]); },
+  onData: (fn) => { fn(); let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(fn, 120); }); }
+};
+
+const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const MESES_L = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const fmt = d3.format(',');
+const pc = d3.format('.0%');
+let HM = false;
+const META_KEYS = ['meta', 'metaDia', 'esperado', 'cumpl', 'ritmo', 'estado', 'base'];
+const S = {mes: null, zona: '', zonal: '', formato: '', vista: 'zona', sort: 'ritmo', dir: 1, q: ''};
+
+dash.calc('tienda_mes', {
+  inputs: ['tiendas', 'metas', 'registros'],
+  title: 'Tienda por mes',
+  description: 'Une cada tienda con sus registros de cada mes de 2026 y, solo en el mes de la meta, con su meta (15% de la venta base).',
+  fn: (tiendas, metas, registros) => {
+    const reg = {};
+    const meses = {};
+    for (const r of registros) {
+      if (r.day < '2026-01-01') continue;
+      const mes = r.day.slice(0, 7);
+      meses[mes] = 1;
+      const k = r.cod + '|' + mes;
+      const o = reg[k] || (reg[k] = {regs: 0, brutos: 0});
+      o.regs += Number(r.regs);
+      o.brutos += Number(r.brutos);
+    }
+    const mt = {};
+    for (const m of metas) { mt[m.cod + '|' + m.mes] = m; meses[m.mes] = 1; }
+    const out = [];
+    for (const x of tiendas) {
+      for (const mes of Object.keys(meses).sort()) {
+        const o = reg[x.cod + '|' + mes] || {regs: 0, brutos: 0};
+        const m = mt[x.cod + '|' + mes];
+        out.push({cod: x.cod, nombre: x.nombre, zona: x.zona, zonal: x.zonal, formato: x.formato, status: x.status, mes,
+          dias: new Date(Date.UTC(+mes.slice(0, 4), +mes.slice(5), 0)).getUTCDate(),
+          regs: o.regs, brutos: o.brutos, meta: m ? Number(m.meta) : null,
+          base_tipo: m ? m.base_tipo : '', base_mes: m ? m.base_mes : ''});
+      }
+    }
+    return out;
+  }
+});
+
+dash.calc('registros_dia', {
+  inputs: ['tiendas', 'registros'],
+  title: 'Registros por día con zona',
+  description: 'Registros por día y tienda de 2026, con la zona, el zonal y el formato de cada tienda.',
+  fn: (tiendas, registros) => {
+    const t = {};
+    for (const x of tiendas) t[x.cod] = x;
+    return registros.filter((r) => r.day >= '2026-01-01').map((r) => {
+      const x = t[r.cod] || {};
+      return {day: r.day, mes: r.day.slice(0, 7), cod: r.cod, zona: x.zona, zonal: x.zonal, formato: x.formato,
+        regs: Number(r.regs), brutos: Number(r.brutos)};
+    });
+  }
+});
+
+const $ = (s) => document.querySelector(s);
+const ok = (id) => dash.data(id).status === 'ok';
+const mesLabel = (m) => MESES_L[+m.slice(5) - 1] + ' ' + m.slice(0, 4);
+
+function context() {
+  const days = dash.data('registros_dia').data;
+  let maxDay = '';
+  for (const r of days) if (r.day > maxDay) maxDay = r.day;
+  return {maxDay, maxMes: maxDay.slice(0, 7)};
+}
+
+function fillSelect(sel, opts, value, allLabel) {
+  const cur = value;
+  const items = allLabel ? [new Option(allLabel, '')] : [];
+  for (const o of opts) items.push(new Option(o.label ?? o, o.value ?? o));
+  sel.replaceChildren(...items);
+  sel.value = cur;
+  if (sel.value !== cur) sel.value = '';
+}
+
+const mesCorto = (m) => MESES[+m.slice(5) - 1] + ' ' + m.slice(0, 4);
+function baseTxt(r) {
+  if (r.base_tipo.startsWith('mismo mes')) return 'Mismo mes del año anterior';
+  if (r.base_tipo === 'promedio meses con venta') return 'Promedio de ' + r.base_mes + ' meses con venta';
+  if (r.base_tipo === 'predeterminada') return 'Predeterminada (20)';
+  return '';
+}
+
+function stateOf(r) {
+  if (!(r.meta > 0)) return {k: 'na', t: 'Sin meta', rank: 3};
+  if (r.ritmo >= 1) return {k: 'ok', t: 'En meta', rank: 0};
+  if (r.ritmo >= 0.7) return {k: 'warn', t: 'En riesgo', rank: 1};
+  return {k: 'bad', t: 'Rezagada', rank: 2};
+}
+
+function build(ctx) {
+  const out = [];
+  for (const r of dash.data('tienda_mes').data) {
+    if (r.mes !== S.mes) continue;
+    if (!(r.status === 'Activo' || r.regs > 0)) continue;
+    if (S.zona && r.zona !== S.zona) continue;
+    if (S.zonal && r.zonal !== S.zonal) continue;
+    if (S.formato && r.formato !== S.formato) continue;
+    const dias = r.dias;
+    const el = S.mes === ctx.maxMes ? +ctx.maxDay.slice(8) : dias;
+    const meta = (r.meta != null && r.status === 'Activo') ? r.meta : 0;
+    const esperado = meta * el / dias;
+    out.push({status: r.status, cod: r.cod, nombre: r.nombre, zona: r.zona, zonal: r.zonal, formato: r.formato, v: r.regs, meta, dias, el,
+      metaDia: meta / dias, esperado, cumpl: meta > 0 ? r.regs / meta : null, ritmo: esperado > 0 ? r.regs / esperado : null,
+      proy: r.regs / el * dias, brutos: r.brutos, bt: r.base_tipo, base: r.status === 'Activo' ? baseTxt(r) : 'Sin meta (' + r.status + ')'});
+  }
+  for (const r of out) r.st = stateOf(r);
+  return out;
+}
+
+function agg(list) {
+  const a = {n: list.length, v: 0, vMeta: 0, meta: 0, esperado: 0, conMeta: 0, dias: 0, el: 0, brutos: 0, activas: 0};
+  for (const r of list) {
+    a.v += r.v; a.meta += r.meta; a.esperado += r.esperado; a.brutos += r.brutos;
+    a.dias = r.dias; a.el = r.el;
+    if (r.v > 0) a.activas++;
+    if (r.meta > 0) { a.conMeta++; a.vMeta += r.v; }
+  }
+  a.cumpl = a.meta > 0 ? a.vMeta / a.meta : null;
+  a.ritmo = a.esperado > 0 ? a.vMeta / a.esperado : null;
+  a.proy = a.el > 0 ? a.v / a.el * a.dias : 0;
+  return a;
+}
+
+function stClass(ritmo, meta) {
+  if (!(meta > 0)) return 'na';
+  return ritmo >= 1 ? 'ok' : ritmo >= 0.7 ? 'warn' : 'bad';
+}
+
+function kpis(a) {
+  const el = a.el, dias = a.dias;
+  $('#k-regs').textContent = fmt(a.v);
+  $('#k-regs-n').textContent = el < dias ? 'Del 1 al ' + el + ' de ' + MESES[+S.mes.slice(5) - 1] : 'Mes completo';
+  $('#k-prom').textContent = fmt(Math.round(a.v / (el || 1)));
+  $('#k-prom-n').textContent = fmt(a.activas) + ' tiendas con registros';
+  document.querySelectorAll('.mt').forEach((e) => { e.hidden = !HM; });
+  if (!HM) return;
+  $('#k-meta').textContent = fmt(Math.round(a.meta));
+  $('#k-meta-n').textContent = fmt(Math.round(a.meta / (dias || 1))) + ' por día · ' + a.conMeta + ' tiendas con meta';
+  $('#k-cumpl').textContent = a.cumpl == null ? '—' : pc(a.cumpl);
+  $('#k-cumpl-n').textContent = 'de la meta del mes';
+  $('#k-ritmo').textContent = a.ritmo == null ? '—' : pc(a.ritmo);
+  $('#k-ritmo-n').textContent = 'Esperado a la fecha: ' + fmt(Math.round(a.esperado));
+  $('#k-proy').textContent = fmt(Math.round(a.proy));
+  $('#k-proy-n').textContent = a.meta > 0 ? pc(a.proy / a.meta) + ' de la meta' : '';
+  $('#k-ritmo').style.color = a.ritmo == null ? '' : 'var(--color-' + stClass(a.ritmo, 1) + ')';
+}
+
+function takeaway(a, list) {
+  const when = a.el < a.dias ? 'Al ' + a.el + ' de ' + MESES_L[+S.mes.slice(5) - 1] : 'En ' + mesLabel(S.mes);
+  if (!HM) { $('#rg-take').textContent = when + ' hay ' + fmt(a.v) + ' registros de DNI únicos, unos ' + fmt(Math.round(a.v / (a.el || 1))) + ' por día. La meta está definida solo para el mes en curso.'; return; }
+  const bad = list.filter((r) => r.st.k === 'bad').length;
+  const okc = list.filter((r) => r.st.k === 'ok').length;
+  const tm = list.filter((r) => r.meta > 0).length;
+  $('#rg-take').textContent = when + ' hay ' + fmt(a.v) + ' registros de DNI únicos: ' + pc(a.cumpl) + ' de la meta del mes y ' + pc(a.ritmo) +
+    ' de lo esperado a la fecha. ' + okc + ' de ' + tm + ' tiendas con meta van al ritmo y ' + bad + ' están rezagadas.';
+}
+
+function tip(wrap) {
+  let t = wrap.querySelector('.rg-tip');
+  if (!t) { t = document.createElement('div'); t.className = 'rg-tip'; wrap.appendChild(t); }
+  return t;
+}
+function showTip(wrap, t, event, h, lines) {
+  t.replaceChildren();
+  const hd = document.createElement('div'); hd.className = 'h'; hd.textContent = h; t.appendChild(hd);
+  for (const l of lines) { const d = document.createElement('div'); d.textContent = l; t.appendChild(d); }
+  t.style.display = 'block';
+  const [x, y] = d3.pointer(event, wrap);
+  const w = t.offsetWidth;
+  t.style.left = Math.max(0, Math.min(wrap.clientWidth - w, x + 12)) + 'px';
+  t.style.top = Math.max(0, y - 46) + 'px';
+}
+
+function dailyData(a) {
+  const byDay = new Map();
+  for (const r of dash.data('registros_dia').data) {
+    if (r.mes !== S.mes) continue;
+    if (S.zona && r.zona !== S.zona) continue;
+    if (S.zonal && r.zonal !== S.zonal) continue;
+    if (S.formato && r.formato !== S.formato) continue;
+    const n = +r.day.slice(8);
+    byDay.set(n, (byDay.get(n) || 0) + r.regs);
+  }
+  const out = [];
+  let cum = 0;
+  for (let n = 1; n <= a.dias; n++) {
+    const v = n <= a.el ? (byDay.get(n) || 0) : null;
+    if (v != null) cum += v;
+    out.push({n, v, cum: v != null ? cum : null});
+  }
+  return out;
+}
+
+function svgBase(el, h) {
+  el.replaceChildren();
+  const w = Math.max(280, el.clientWidth);
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + w + ' ' + h);
+  return {svg, w};
+}
+
+function drawDaily(a) {
+  const el = $('#ch-diario');
+  const data = dailyData(a);
+  const metaDia = a.meta / (a.dias || 1);
+  const h = 250, m = {t: 14, r: 10, b: 24, l: 42};
+  const {svg, w} = svgBase(el, h);
+  const ymax = Math.max(d3.max(data, (d) => d.v) || 0, metaDia) * 1.15 || 1;
+  const y = d3.scaleLinear([0, ymax], [h - m.b, m.t]).nice(4);
+  const x = d3.scaleBand(data.map((d) => d.n), [m.l, w - m.r]).padding(0.22);
+  svg.append('g').selectAll('line').data(y.ticks(4)).join('line')
+    .attr('x1', m.l).attr('x2', w - m.r).attr('y1', (d) => y(d)).attr('y2', (d) => y(d)).attr('stroke', 'var(--cds-chart-grid)');
+  svg.append('g').selectAll('text').data(y.ticks(4)).join('text')
+    .attr('x', m.l - 6).attr('y', (d) => y(d) + 4).attr('text-anchor', 'end').text((d) => fmt(d));
+  svg.append('g').selectAll('text').data(data.filter((d) => d.n === 1 || d.n % 5 === 0)).join('text')
+    .attr('x', (d) => x(d.n) + x.bandwidth() / 2).attr('y', h - 6).attr('text-anchor', 'middle').text((d) => d.n);
+  svg.append('g').selectAll('rect').data(data.filter((d) => d.v != null)).join('rect')
+    .attr('x', (d) => x(d.n)).attr('width', x.bandwidth()).attr('y', (d) => y(d.v)).attr('height', (d) => Math.max(0, y(0) - y(d.v)))
+    .attr('rx', Math.min(4, x.bandwidth() / 2))
+    .attr('fill', (d) => (metaDia > 0 && d.v < metaDia) ? 'var(--cds-chart-muted)' : 'var(--cds-chart-status-neutral, ' + dash.colors[0] + ')')
+    .style('fill', (d) => (metaDia > 0 && d.v < metaDia) ? 'var(--cds-chart-muted)' : dash.colors[0]);
+  if (metaDia > 0) {
+    svg.append('line').attr('x1', m.l).attr('x2', w - m.r).attr('y1', y(metaDia)).attr('y2', y(metaDia))
+      .attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '4 4').attr('stroke-width', 1.5);
+    svg.append('text').attr('x', w - m.r).attr('y', y(metaDia) - 5).attr('text-anchor', 'end')
+      .style('paint-order', 'stroke').style('stroke', 'var(--color-panel)').style('stroke-width', '3px')
+      .text('Meta diaria ' + fmt(Math.round(metaDia)));
+  }
+  const t = tip(el);
+  svg.append('g').selectAll('rect').data(data).join('rect')
+    .attr('x', (d) => x(d.n) - 2).attr('width', x.bandwidth() + 4).attr('y', m.t).attr('height', h - m.b - m.t).attr('fill', 'transparent')
+    .on('mousemove', (event, d) => {
+      if (d.v == null) { t.style.display = 'none'; return; }
+      showTip(el, t, event, d.n + ' de ' + MESES[+S.mes.slice(5) - 1], [fmt(d.v) + ' registros', metaDia > 0 ? pc(d.v / metaDia) + ' de la meta diaria' : '']);
+    }).on('mouseleave', () => { t.style.display = 'none'; });
+}
+
+function drawAcum(a) {
+  if (!HM) return;
+  const el = $('#ch-acum');
+  const data = dailyData(a);
+  const h = 250, m = {t: 14, r: 12, b: 24, l: 46};
+  const {svg, w} = svgBase(el, h);
+  const ymax = Math.max(a.meta, d3.max(data, (d) => d.cum) || 0) * 1.1 || 1;
+  const y = d3.scaleLinear([0, ymax], [h - m.b, m.t]).nice(4);
+  const x = d3.scaleLinear([1, a.dias], [m.l, w - m.r - 6]);
+  svg.append('g').selectAll('line').data(y.ticks(4)).join('line')
+    .attr('x1', m.l).attr('x2', w - m.r).attr('y1', (d) => y(d)).attr('y2', (d) => y(d)).attr('stroke', 'var(--cds-chart-grid)');
+  svg.append('g').selectAll('text').data(y.ticks(4)).join('text')
+    .attr('x', m.l - 6).attr('y', (d) => y(d) + 4).attr('text-anchor', 'end').text((d) => fmt(d));
+  svg.append('g').selectAll('text').data(data.filter((d) => d.n === 1 || d.n % 5 === 0)).join('text')
+    .attr('x', (d) => x(d.n)).attr('y', h - 6).attr('text-anchor', 'middle').text((d) => d.n);
+  const goal = (n) => a.meta * n / a.dias;
+  svg.append('line').attr('x1', x(1)).attr('y1', y(goal(1))).attr('x2', x(a.dias)).attr('y2', y(goal(a.dias)))
+    .attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '4 4').attr('stroke-width', 1.5);
+  svg.append('text').attr('x', x(a.dias)).attr('y', y(a.meta) - 6).attr('text-anchor', 'end')
+    .text('Meta ' + fmt(Math.round(a.meta)));
+  const pts = data.filter((d) => d.cum != null);
+  svg.append('path').attr('d', d3.line().x((d) => x(d.n)).y((d) => y(d.cum))(pts)).attr('fill', 'none')
+    .style('stroke', dash.colors[0]).attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+  const last = pts[pts.length - 1];
+  if (last) {
+    svg.append('circle').attr('cx', x(last.n)).attr('cy', y(last.cum)).attr('r', 4).style('fill', dash.colors[0])
+      .style('stroke', 'var(--color-panel)').attr('stroke-width', 2);
+    svg.append('text').attr('x', x(last.n) - 8).attr('y', y(last.cum) - 8).attr('text-anchor', 'end').style('fill', 'var(--color-fg)').text(fmt(last.cum));
+  }
+  const t = tip(el);
+  const step = (w - m.l - m.r) / Math.max(1, a.dias - 1);
+  svg.append('g').selectAll('rect').data(data).join('rect')
+    .attr('x', (d) => x(d.n) - step / 2).attr('width', step).attr('y', m.t).attr('height', h - m.b - m.t).attr('fill', 'transparent')
+    .on('mousemove', (event, d) => {
+      if (d.cum == null) { t.style.display = 'none'; return; }
+      showTip(el, t, event, d.n + ' de ' + MESES[+S.mes.slice(5) - 1], ['Acumulado: ' + fmt(d.cum), 'Esperado: ' + fmt(Math.round(goal(d.n)))]);
+    }).on('mouseleave', () => { t.style.display = 'none'; });
+}
+
+function th(tr, label, key, cls, sortable, tbl) {
+  const c = document.createElement('th');
+  if (cls) c.className = cls;
+  if (sortable) {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = label;
+    b.addEventListener('click', () => {
+      if (S.sort === key) S.dir = -S.dir; else { S.sort = key; S.dir = (key === 'nombre' || key === 'zona' || key === 'zonal' || key === 'formato') ? 1 : (key === 'ritmo' || key === 'cumpl' || key === 'estado') ? 1 : -1; }
+      render();
+    });
+    c.appendChild(b);
+    c.setAttribute('aria-sort', S.sort === key ? (S.dir === 1 ? 'ascending' : 'descending') : 'none');
+  } else c.textContent = label;
+  tr.appendChild(c);
+}
+function td(tr, text, cls) { const c = document.createElement('td'); if (cls) c.className = cls; c.textContent = text; tr.appendChild(c); return c; }
+
+function barCell(tr, cumpl, meta, ritmo, el, dias) {
+  const c = document.createElement('td');
+  const k = stClass(ritmo, meta);
+  if (meta > 0) {
+    const bar = document.createElement('span'); bar.className = 'rg-bar ' + k;
+    const f = document.createElement('b'); f.style.width = Math.min(100, (cumpl || 0) * 100) + '%';
+    bar.append(f); c.appendChild(bar);
+    c.appendChild(document.createTextNode(pc(cumpl)));
+  } else c.textContent = '—';
+  tr.appendChild(c);
+}
+
+function ritmoCell(tr, ritmo, meta) {
+  const c = document.createElement('td');
+  if (meta > 0) { const sp = document.createElement('span'); sp.className = 'rg-st st-' + stClass(ritmo, meta); sp.textContent = pc(ritmo); c.appendChild(sp); }
+  else c.textContent = '—';
+  tr.appendChild(c);
+}
+
+function drawGroups(list) {
+  const key = S.vista;
+  const g = new Map();
+  for (const r of list) { const k = r[key] || 'Sin dato'; if (!g.has(k)) g.set(k, []); g.get(k).push(r); }
+  const rows = [...g.entries()].map(([k, l]) => ({k, a: agg(l), otro: key === 'zona' ? [...new Set(l.map((x) => x.zonal))].join(', ') : [...new Set(l.map((x) => x.zona))].join(', ')}));
+  rows.sort((p, q) => HM ? (p.a.ritmo ?? 9) - (q.a.ritmo ?? 9) : q.a.v - p.a.v);
+  $('#g-note').textContent = HM ? 'Registros y avance sobre la meta del mes por grupo.' : 'Registros por grupo. La meta solo existe para el mes en curso.';
+  const tbl = $('#t-grupo');
+  tbl.replaceChildren();
+  const thead = document.createElement('thead'); const hr = document.createElement('tr');
+  th(hr, key === 'zona' ? 'Zona' : 'Zonal', '', 't'); th(hr, key === 'zona' ? 'Zonal' : 'Zona', '', 't opt');
+  th(hr, 'Tiendas'); th(hr, 'Registros');
+  if (HM) { th(hr, 'Meta'); th(hr, 'Avance sobre la meta'); } else th(hr, 'Promedio por día');
+  thead.appendChild(hr); tbl.appendChild(thead);
+  const tb = document.createElement('tbody');
+  for (const r of rows) {
+    const tr = document.createElement('tr');
+    td(tr, r.k, 't'); td(tr, r.otro, 't opt');
+    td(tr, fmt(r.a.n)); td(tr, fmt(r.a.v));
+    if (HM) { td(tr, fmt(Math.round(r.a.meta))); barCell(tr, r.a.cumpl, r.a.meta, r.a.ritmo, r.a.el, r.a.dias); }
+    else td(tr, fmt(Math.round(r.a.v / (r.a.el || 1))));
+    tb.appendChild(tr);
+  }
+  tbl.appendChild(tb);
+}
+
+function drawTiendas(list) {
+  const q = S.q.trim().toLowerCase();
+  let rows = list.filter((r) => !q || (r.cod + ' ' + r.nombre + ' ' + r.zona + ' ' + r.zonal).toLowerCase().includes(q));
+  const val = (r) => S.sort === 'estado' ? r.st.rank : r[S.sort];
+  rows = rows.slice().sort((a, b) => {
+    const x = val(a), y = val(b);
+    if (x == null && y == null) return 0;
+    if (x == null) return 1; if (y == null) return -1;
+    return (typeof x === 'string' ? x.localeCompare(y) : x - y) * S.dir;
+  });
+  $('#t-note').textContent = fmt(rows.length) + ' tiendas · ordena con los títulos de columna';
+  const tbl = $('#t-tiendas');
+  tbl.replaceChildren();
+  const thead = document.createElement('thead'); const hr = document.createElement('tr');
+  th(hr, 'Tienda', 'nombre', 't', true); th(hr, 'Zona', 'zona', 't', true); th(hr, 'Zonal', 'zonal', 't opt', true); th(hr, 'Formato', 'formato', 't opt', true);
+  th(hr, 'Registros', 'v', '', true);
+  if (HM) {
+    th(hr, 'Meta mes', 'meta', '', true); th(hr, 'Meta/día', 'metaDia', 'opt', true);
+    th(hr, 'Avance', 'cumpl', '', true); th(hr, 'Estado', 'estado', 't', true); th(hr, 'Base de la meta', 'base', 't opt', true);
+  }
+  thead.appendChild(hr); tbl.appendChild(thead);
+  $('#t-leg').hidden = !HM;
+  const tb = document.createElement('tbody');
+  for (const r of rows) {
+    const tr = document.createElement('tr');
+    const c = td(tr, '', 't'); const cd = document.createElement('span'); cd.className = 'c'; cd.textContent = r.cod; c.append(cd, document.createTextNode(r.nombre));
+    td(tr, r.zona, 't'); td(tr, r.zonal, 't opt'); td(tr, r.formato, 't opt');
+    td(tr, fmt(r.v));
+    if (HM) {
+      td(tr, r.meta > 0 ? fmt(Math.round(r.meta)) : '—');
+      td(tr, r.meta > 0 ? fmt(Math.round(r.metaDia)) : '—', 'opt');
+      barCell(tr, r.cumpl, r.meta, r.ritmo, r.el, r.dias);
+      const e = document.createElement('td'); e.className = 't';
+      const sp = document.createElement('span'); sp.className = 'rg-st st-' + r.st.k; sp.textContent = r.st.t; e.appendChild(sp); tr.appendChild(e);
+      td(tr, r.base, 't opt');
+    }
+    tb.appendChild(tr);
+  }
+  tbl.appendChild(tb);
+}
+
+function notes(list, a, ctx) {
+  const ul = $('#n-list'); ul.replaceChildren();
+  const add = (t) => { const li = document.createElement('li'); li.textContent = t; ul.appendChild(li); };
+  add('Se excluyeron ' + fmt(a.brutos - a.v) + ' registros de DNI que ya habían sido registrados antes, en esta selección. Un DNI cuenta una sola vez en toda la campaña, aunque vuelva a registrarse en otro mes o en otra tienda.');
+  if (HM) {
+    const ult = list.filter((r) => r.status === 'Activo' && r.bt === 'promedio meses con venta').length;
+    const def = list.filter((r) => r.status === 'Activo' && r.bt === 'predeterminada').length;
+    add(ult + ' tiendas no vendieron en el mismo mes de 2025 (aperturas posteriores) y toman el promedio de los meses con venta que tuvieron. ' + def + ' no tienen ninguna venta y usan la meta por defecto de 20.');
+    const byMes = {};
+    for (const r of dash.data('tienda_mes').data) byMes[r.mes] = (byMes[r.mes] || 0) + r.regs;
+    const best = d3.max(Object.values(byMes)) || 0;
+    add('La meta total de esta selección (' + fmt(Math.round(a.meta)) + ') es mucho mayor que lo registrado hasta ahora: el mejor mes de 2026 tuvo ' + fmt(best) + ' registros en todas las tiendas.');
+  }
+  add('Los códigos en minúscula (por ejemplo h02, k42) se unieron a su tienda en mayúscula. Los de 4 caracteres o más (K06P, T50P) y los vacíos quedaron fuera.');
+  if (S.mes === ctx.maxMes) add('El último día del archivo puede estar incompleto: el último registro es de media tarde. Eso baja un poco el ritmo del mes en curso.');
+}
+
+const MX = {vista: 'tabla', q: '', tienda: ''};
+function drawMxChart(months, vals, titulo) {
+  const el = $('#mx-chart');
+  $('#mx-ctitle').textContent = titulo;
+  const h = 260, m = {t: 22, r: 10, b: 24, l: 42};
+  const {svg, w} = svgBase(el, h);
+  const ymax = (d3.max(vals) || 0) * 1.12 || 1;
+  const y = d3.scaleLinear([0, ymax], [h - m.b, m.t]).nice(4);
+  const x = d3.scaleBand(months, [m.l, w - m.r]).padding(0.3);
+  svg.append('g').selectAll('line').data(y.ticks(4)).join('line')
+    .attr('x1', m.l).attr('x2', w - m.r).attr('y1', (d) => y(d)).attr('y2', (d) => y(d)).attr('stroke', 'var(--cds-chart-grid)');
+  svg.append('g').selectAll('text').data(y.ticks(4)).join('text')
+    .attr('x', m.l - 6).attr('y', (d) => y(d) + 4).attr('text-anchor', 'end').text((d) => fmt(d));
+  const data = months.map((mm, k) => ({mes: mm, v: vals[k]}));
+  svg.append('g').selectAll('text').data(data).join('text')
+    .attr('x', (d) => x(d.mes) + x.bandwidth() / 2).attr('y', h - 6).attr('text-anchor', 'middle').text((d) => MESES[+d.mes.slice(5) - 1]);
+  svg.append('g').selectAll('rect').data(data).join('rect')
+    .attr('x', (d) => x(d.mes)).attr('width', x.bandwidth()).attr('y', (d) => y(d.v)).attr('height', (d) => Math.max(0, y(0) - y(d.v)))
+    .attr('rx', Math.min(4, x.bandwidth() / 2)).style('fill', dash.colors[0]);
+  svg.append('g').selectAll('text').data(data.filter((d) => d.v > 0)).join('text')
+    .attr('x', (d) => x(d.mes) + x.bandwidth() / 2).attr('y', (d) => y(d.v) - 5).attr('text-anchor', 'middle')
+    .style('fill', 'var(--color-fg)').text((d) => fmt(d.v));
+  const t = tip(el);
+  svg.append('g').selectAll('rect').data(data).join('rect')
+    .attr('x', (d) => x(d.mes) - 3).attr('width', x.bandwidth() + 6).attr('y', m.t).attr('height', h - m.b - m.t).attr('fill', 'transparent')
+    .on('mousemove', (event, d) => showTip(el, t, event, MESES_L[+d.mes.slice(5) - 1] + ' 2026', [fmt(d.v) + ' DNI distintos']))
+    .on('mouseleave', () => { t.style.display = 'none'; });
+}
+
+function drawMatriz() {
+  const rows = dash.data('matriz').data.filter((r) => r.huso === 'lima');
+  const months = [...new Set(rows.map((r) => r.mes).filter((m) => m !== 'total'))].sort();
+  const by = new Map();
+  for (const r of rows) { if (!by.has(r.cod)) by.set(r.cod, {}); by.get(r.cod)[r.mes] = Number(r.dni); }
+  const info = new Map(dash.data('tiendas').data.map((t) => [t.cod, t]));
+  const base = [...by.keys()].filter((c) => c !== '*').map((c) => ({cod: c, t: info.get(c) || {}, v: by.get(c)})).filter((x) =>
+    (!S.zona || x.t.zona === S.zona) && (!S.zonal || x.t.zonal === S.zonal) && (!S.formato || x.t.formato === S.formato));
+  base.sort((a, b) => (b.v.total || 0) - (a.v.total || 0));
+  const graf = MX.vista === 'graf';
+  $('#mx-tabla').setAttribute('aria-pressed', !graf);
+  $('#mx-graf').setAttribute('aria-pressed', graf);
+  $('#mx-twrap').hidden = graf;
+  $('#mx-gwrap').hidden = !graf;
+  $('#mx-qw').hidden = graf;
+  $('#mx-tw').hidden = !graf;
+  if (graf) {
+    const opts = [{value: '', label: 'Suma de las tiendas del filtro'}].concat(base.map((x) => ({value: x.cod, label: x.cod + ' · ' + (x.t.nombre || '')})));
+    if (MX.tienda && !base.some((x) => x.cod === MX.tienda)) MX.tienda = '';
+    fillSelect($('#f-mt'), opts, MX.tienda, null);
+    const sel = MX.tienda ? base.find((x) => x.cod === MX.tienda) : null;
+    const vals = months.map((m) => sel ? (sel.v[m] || 0) : base.reduce((s, x) => s + (x.v[m] || 0), 0));
+    drawMxChart(months, vals, sel ? 'DNI distintos por mes en ' + sel.cod + ' ' + (sel.t.nombre || '') : 'Suma de DNI distintos por mes de las ' + fmt(base.length) + ' tiendas del filtro');
+    return;
+  }
+  const q = MX.q.trim().toLowerCase();
+  const list = base.filter((x) => !q || (x.cod + ' ' + (x.t.nombre || '') + ' ' + (x.t.zona || '')).toLowerCase().includes(q));
+  const mx = d3.max(list, (x) => d3.max(months, (m) => x.v[m] || 0)) || 1;
+  const tbl = $('#t-matriz');
+  tbl.replaceChildren();
+  const thead = document.createElement('thead'); const hr = document.createElement('tr');
+  th(hr, 'Tienda', '', 't');
+  for (const m of months) th(hr, MESES_L[+m.slice(5) - 1].replace(/^./, (c) => c.toUpperCase()));
+  th(hr, 'Total general');
+  thead.appendChild(hr); tbl.appendChild(thead);
+  const tb = document.createElement('tbody');
+  const sums = {};
+  for (const x of list) {
+    const tr = document.createElement('tr');
+    const c = td(tr, '', 't'); const cd = document.createElement('span'); cd.className = 'c'; cd.textContent = x.cod; c.append(cd, document.createTextNode(x.t.nombre || ''));
+    for (const m of months) {
+      const n = x.v[m] || 0;
+      sums[m] = (sums[m] || 0) + n;
+      const cell = td(tr, n ? fmt(n) : '', 'n');
+      if (n) cell.style.background = 'color-mix(in srgb, ' + dash.colors[0] + ' ' + Math.round(n / mx * 40) + '%, transparent)';
+    }
+    td(tr, fmt(x.v.total || 0), 'tot');
+    tb.appendChild(tr);
+  }
+  const addSum = (label, f) => {
+    const tr = document.createElement('tr'); tr.className = 'sum';
+    td(tr, label, 't');
+    for (const m of months) { const n = f(m); td(tr, n ? fmt(n) : '', 'n'); }
+    return tr;
+  };
+  const r1 = addSum('Suma de tiendas', (m) => sums[m]);
+  td(r1, fmt(months.reduce((s, m) => s + (sums[m] || 0), 0)), 'tot'); tb.appendChild(r1);
+  tbl.appendChild(tb);
+}
+
+const AN = {vista: 'zona', sel: ''};
+function drawAnio() {
+  const rows = dash.data('matriz').data.filter((r) => r.huso === 'lima' && r.cod !== '*' && r.mes !== 'total');
+  const info = new Map(dash.data('tiendas').data.map((t) => [t.cod, t]));
+  const months = [...new Set(rows.map((r) => r.mes))].sort();
+  const groups = new Map();
+  const totalBy = {};
+  for (const r of rows) {
+    const t = info.get(r.cod) || {};
+    if ((S.zona && t.zona !== S.zona) || (S.zonal && t.zonal !== S.zonal) || (S.formato && t.formato !== S.formato)) continue;
+    const g = AN.vista === 'zona' ? t.zona : t.zonal;
+    if (!g) continue;
+    const o = groups.get(g) || {name: g, by: {}, total: 0, sub: new Set()};
+    const n = Number(r.dni);
+    o.by[r.mes] = (o.by[r.mes] || 0) + n; o.total += n;
+    o.sub.add(AN.vista === 'zona' ? t.zonal : t.zona);
+    groups.set(g, o);
+    totalBy[r.mes] = (totalBy[r.mes] || 0) + n;
+  }
+  const prevBy = {}, prevTot = {}, has25 = new Set();
+  for (const r of dash.data('matriz25').data) {
+    const t = info.get(r.cod) || {};
+    if ((S.zona && t.zona !== S.zona) || (S.zonal && t.zonal !== S.zonal) || (S.formato && t.formato !== S.formato)) continue;
+    const g = AN.vista === 'zona' ? t.zona : t.zonal;
+    if (!g) continue;
+    const n = Number(r.dni);
+    (prevBy[g] = prevBy[g] || {})[r.mes] = ((prevBy[g] || {})[r.mes] || 0) + n;
+    prevTot[r.mes] = (prevTot[r.mes] || 0) + n; has25.add(r.mes);
+  }
+  const list = [...groups.values()].sort((a, b) => b.total - a.total);
+  if (AN.sel && !groups.has(AN.sel)) AN.sel = '';
+  $('#an-zona').setAttribute('aria-pressed', AN.vista === 'zona');
+  $('#an-zonal').setAttribute('aria-pressed', AN.vista === 'zonal');
+  fillSelect($('#f-an'), [{value: '', label: 'Todas (total)'}].concat(list.map((g) => ({value: g.name, label: g.name}))), AN.sel, null);
+  const grand = months.reduce((s, m) => s + (totalBy[m] || 0), 0);
+  $('#an-note').textContent = 'Suma de tiendas de enero a ' + MESES_L[+months[months.length - 1].slice(5) - 1] + ' de 2026, hora de Lima. Total: ' + fmt(grand) + '. Toca una barra para ver su evolución.';
+  $('#an-h1').textContent = 'Acumulado del año por ' + (AN.vista === 'zona' ? 'zona' : 'zonal');
+  const selG = AN.sel ? groups.get(AN.sel) : null;
+  $('#an-h2').textContent = 'Evolución acumulada: ' + (selG ? selG.name : 'total de las tiendas del filtro');
+
+  // ranking horizontal
+  const el = $('#an-rank'); el.replaceChildren();
+  const w = Math.max(280, el.clientWidth), rowH = 30, m = {t: 4, r: 56, b: 4, l: 10};
+  const h = Math.max(120, list.length * rowH + m.t + m.b);
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + w + ' ' + h).style('height', 'auto');
+  const probe = svg.append('text');
+  let maxLab = 0;
+  for (const g of list) { probe.text(g.name); maxLab = Math.max(maxLab, probe.node().getComputedTextLength()); }
+  probe.remove();
+  const left = Math.min(w * 0.45, maxLab + 16);
+  const x = d3.scaleLinear([0, d3.max(list, (g) => g.total) || 1], [left, w - m.r]);
+  const t = tip(el);
+  const gr = svg.selectAll('g.row').data(list).join('g').attr('class', 'row bar').attr('transform', (g, i) => 'translate(0,' + (m.t + i * rowH) + ')')
+    .style('opacity', (g) => (selG && g.name !== selG.name) ? 0.45 : 1)
+    .on('click', (event, g) => { AN.sel = (AN.sel === g.name) ? '' : g.name; drawAnio(); })
+    .on('mousemove', (event, g) => showTip(el, t, event, g.name, [fmt(g.total) + ' registros en el año', [...g.sub].join(', ')]))
+    .on('mouseleave', () => { t.style.display = 'none'; });
+  gr.append('rect').attr('x', 0).attr('y', 0).attr('width', w).attr('height', rowH).attr('fill', 'transparent');
+  gr.append('text').attr('x', left - 8).attr('y', rowH / 2 + 4).attr('text-anchor', 'end').style('fill', 'var(--color-fg)').text((g) => g.name);
+  gr.append('rect').attr('x', left).attr('y', 6).attr('height', rowH - 12).attr('rx', 4).attr('width', (g) => Math.max(2, x(g.total) - left)).style('fill', dash.colors[0]);
+  gr.append('text').attr('x', (g) => x(g.total) + 6).attr('y', rowH / 2 + 4).style('fill', 'var(--color-fg)').text((g) => fmt(g.total));
+
+  // evolución acumulada
+  const ev = $('#an-evo'); ev.replaceChildren();
+  const src = selG ? selG.by : totalBy;
+  let cum = 0;
+  const pts = months.map((mm) => { const v = src[mm] || 0; cum += v; return {mes: mm, v, cum}; });
+  const eh = 260, em = {t: 24, r: 18, b: 24, l: 46};
+  const ew = Math.max(280, ev.clientWidth);
+  const es = d3.select(ev).append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + ew + ' ' + eh).style('height', 'auto');
+  const y = d3.scaleLinear([0, d3.max(pts, (p) => p.cum) || 1], [eh - em.b, em.t]).nice(4);
+  const xs = d3.scalePoint(months, [em.l + 8, ew - em.r]);
+  es.append('g').selectAll('line').data(y.ticks(4)).join('line').attr('x1', em.l).attr('x2', ew - em.r).attr('y1', (d) => y(d)).attr('y2', (d) => y(d)).attr('stroke', 'var(--cds-chart-grid)');
+  es.append('g').selectAll('text').data(y.ticks(4)).join('text').attr('x', em.l - 6).attr('y', (d) => y(d) + 4).attr('text-anchor', 'end').text((d) => fmt(d));
+  es.append('g').selectAll('text').data(pts).join('text').attr('x', (p) => xs(p.mes)).attr('y', eh - 6).attr('text-anchor', 'middle').text((p) => MESES[+p.mes.slice(5) - 1]);
+  es.append('path').attr('d', d3.line().x((p) => xs(p.mes)).y((p) => y(p.cum))(pts)).attr('fill', 'none').style('stroke', dash.colors[0])
+    .attr('stroke-width', 2.5).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+  es.append('g').selectAll('circle').data(pts).join('circle').attr('cx', (p) => xs(p.mes)).attr('cy', (p) => y(p.cum)).attr('r', 3.5)
+    .style('fill', dash.colors[0]).style('stroke', 'var(--color-panel)').attr('stroke-width', 1.5);
+  const lastP = pts[pts.length - 1];
+  es.append('text').attr('x', xs(lastP.mes)).attr('y', y(lastP.cum) - 10).attr('text-anchor', 'end').style('fill', 'var(--color-fg)').text(fmt(lastP.cum));
+  const t2 = tip(ev);
+  const stepW = (ew - em.l - em.r) / Math.max(1, months.length);
+  es.append('g').selectAll('rect').data(pts).join('rect').attr('x', (p) => xs(p.mes) - stepW / 2).attr('width', stepW).attr('y', em.t).attr('height', eh - em.b - em.t).attr('fill', 'transparent')
+    .on('mousemove', (event, p) => showTip(ev, t2, event, MESES_L[+p.mes.slice(5) - 1] + ' 2026', ['Del mes: ' + fmt(p.v), 'Acumulado: ' + fmt(p.cum)]))
+    .on('mouseleave', () => { t2.style.display = 'none'; });
+  // mes a mes con variación contra el mes anterior
+  const mm = $('#an-mes'); mm.replaceChildren();
+  const ctx2 = context();
+  const lastMes = months[months.length - 1];
+  const dim = new Date(Date.UTC(+lastMes.slice(0, 4), +lastMes.slice(5), 0)).getUTCDate();
+  const partial = lastMes === ctx2.maxMes && +ctx2.maxDay.slice(8) < dim;
+  $('#an-h3').textContent = 'Mes a mes: ' + (selG ? selG.name : 'total de las tiendas del filtro');
+  $('#an-mnote').textContent = 'Registros de cada mes y, sobre cada barra, la variación contra el mismo mes de 2025. s/d = sin datos de 2025, porque la campaña empezó en junio de 2025.' + (partial ? ' ' + MESES_L[+lastMes.slice(5) - 1].replace(/^./, (c) => c.toUpperCase()) + ' llega hasta el ' + ctx2.maxDay.slice(8) + ', por eso su variación es parcial (*) y se compara con los mismos días de octubre de 2025.' : '');
+  const bh = 250, bm = {t: 40, r: 12, b: 24, l: 46};
+  const bw = Math.max(280, mm.clientWidth);
+  const bs = d3.select(mm).append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + bw + ' ' + bh).style('height', 'auto');
+  const by = d3.scaleLinear([0, d3.max(pts, (p) => p.v) || 1], [bh - bm.b, bm.t]).nice(4);
+  const bx = d3.scaleBand(months, [bm.l, bw - bm.r]).padding(0.25);
+  const srcPrev = selG ? (prevBy[selG.name] || {}) : prevTot;
+  pts.forEach((p, k) => {
+    const key = '2025-' + p.mes.slice(5) + ((partial && k === pts.length - 1) ? 'c' : '');
+    p.yPrev = has25.has(key) ? (srcPrev[key] || 0) : null;
+    p.yPct = (p.yPrev != null && p.yPrev > 0) ? (p.v - p.yPrev) / p.yPrev : null;
+  });
+  pts.forEach((p, k) => { p.prev = k ? pts[k - 1].v : null; p.pct = (k && pts[k - 1].v > 0) ? (p.v - pts[k - 1].v) / pts[k - 1].v : null; });
+  const pctTxt = (p, k) => {
+    if (p.pct == null) return '';
+    const a = Math.abs(p.pct);
+    const star = (partial && k === pts.length - 1) ? '*' : '';
+    if (a >= 10) return (p.pct >= 0 ? '▲ ' : '▼ ') + '>999%' + star;
+    return (p.pct >= 0 ? '▲ +' : '▼ −') + d3.format('.0%')(a) + star;
+  };
+  bs.append('g').selectAll('line').data(by.ticks(4)).join('line').attr('x1', bm.l).attr('x2', bw - bm.r).attr('y1', (d) => by(d)).attr('y2', (d) => by(d)).attr('stroke', 'var(--cds-chart-grid)');
+  bs.append('g').selectAll('text').data(by.ticks(4)).join('text').attr('x', bm.l - 6).attr('y', (d) => by(d) + 4).attr('text-anchor', 'end').text((d) => fmt(d));
+  bs.append('g').selectAll('text').data(pts).join('text').attr('x', (p) => bx(p.mes) + bx.bandwidth() / 2).attr('y', bh - 6).attr('text-anchor', 'middle').text((p) => MESES[+p.mes.slice(5) - 1]);
+  bs.append('g').selectAll('rect').data(pts).join('rect').attr('x', (p) => bx(p.mes)).attr('width', bx.bandwidth()).attr('y', (p) => by(p.v)).attr('height', (p) => Math.max(0, by(0) - by(p.v)))
+    .attr('rx', Math.min(4, bx.bandwidth() / 2)).style('fill', dash.colors[0]).style('opacity', (p, k) => (partial && k === pts.length - 1) ? 0.6 : 1);
+  bs.append('g').selectAll('text').data(pts).join('text').attr('x', (p) => bx(p.mes) + bx.bandwidth() / 2).attr('y', (p) => by(p.v) - 6).attr('text-anchor', 'middle')
+    .style('fill', 'var(--color-fg)').text((p) => p.v ? fmt(p.v) : '');
+  const yTxt = (p, k) => {
+    if (p.yPrev == null) return 's/d';
+    if (p.yPct == null) return '—';
+    const a = Math.abs(p.yPct), star = (partial && k === pts.length - 1) ? '*' : '';
+    return (p.yPct >= 0 ? '▲ +' : '▼ −') + (a >= 10 ? '>999%' : d3.format('.0%')(a)) + star;
+  };
+  bs.append('g').selectAll('text').data(pts).join('text').attr('x', (p) => bx(p.mes) + bx.bandwidth() / 2).attr('y', (p) => by(p.v) - 19).attr('text-anchor', 'middle')
+    .style('font-size', '10.5px').style('font-weight', '600').style('fill', (p) => p.yPct == null ? 'var(--color-fg-muted)' : (p.yPct >= 0 ? 'var(--color-ok)' : 'var(--color-bad)'))
+    .text((p, k) => yTxt(p, k));
+  const t3 = tip(mm);
+  bs.append('g').selectAll('rect').data(pts).join('rect').attr('x', (p) => bx(p.mes) - 3).attr('width', bx.bandwidth() + 6).attr('y', bm.t - 20).attr('height', bh - bm.b - bm.t + 20).attr('fill', 'transparent')
+    .on('mousemove', (event, p) => showTip(mm, t3, event, MESES_L[+p.mes.slice(5) - 1] + ' 2026', [
+      fmt(p.v) + ' registros',
+      p.yPrev == null ? 'Sin datos del mismo mes de 2025' : (p.yPct == null ? 'Mismo mes de 2025: 0' : (p.yPct >= 0 ? '+' : '−') + d3.format('.1%')(Math.abs(p.yPct)) + ' vs mismo mes de 2025 (' + fmt(p.yPrev) + ')')]))
+    .on('mouseleave', () => { t3.style.display = 'none'; });
+}
+
+function render() {
+  if (!ok('tienda_mes') || !ok('registros_dia') || !ok('tiendas') || !ok('matriz')) return;
+  const ctx = context();
+  const meses = [...new Set(dash.data('registros_dia').data.map((r) => r.mes))].sort();
+  if (!S.mes) S.mes = ctx.maxMes;
+  fillSelect($('#f-mes'), meses.map((m) => ({value: m, label: mesLabel(m)})).reverse(), S.mes, null);
+  const tiendas = dash.data('tiendas').data;
+  const zonas = [...new Set(tiendas.map((t) => t.zona))].sort();
+  fillSelect($('#f-zona'), zonas, S.zona, 'Todas las zonas');
+  const zonales = [...new Set(tiendas.filter((t) => !S.zona || t.zona === S.zona).map((t) => t.zonal))].sort();
+  if (S.zonal && !zonales.includes(S.zonal)) S.zonal = '';
+  fillSelect($('#f-zonal'), zonales, S.zonal, 'Todos los zonales');
+  fillSelect($('#f-formato'), [...new Set(tiendas.map((t) => t.formato))].sort(), S.formato, 'Todos los formatos');
+  $('#v-zona').setAttribute('aria-pressed', S.vista === 'zona');
+  $('#v-zonal').setAttribute('aria-pressed', S.vista === 'zonal');
+  const list = build(ctx);
+  HM = list.some((r) => r.meta > 0);
+  if (!HM && META_KEYS.includes(S.sort)) { S.sort = 'v'; S.dir = -1; }
+  const a = agg(list);
+  $('#c-acum').hidden = !HM;
+  $('#lg-b-w').hidden = !HM;
+  $('#lg-a-t').textContent = HM ? 'Día sobre la meta diaria' : 'Registros del día';
+  $('#note-d').textContent = HM ? 'Barras por día; la línea punteada es la meta diaria (meta del mes ÷ días del mes).' : 'Registros de DNI únicos por día. La meta solo existe para el mes en curso.';
+  kpis(a); takeaway(a, list);
+  drawDaily(a); drawAcum(a);
+  drawGroups(list); drawTiendas(list); drawAnio(); drawMatriz();
+}
+
+$('#f-mes').addEventListener('change', (e) => { S.mes = e.target.value; render(); });
+$('#f-zona').addEventListener('change', (e) => { S.zona = e.target.value; render(); });
+$('#f-zonal').addEventListener('change', (e) => { S.zonal = e.target.value; render(); });
+$('#f-formato').addEventListener('change', (e) => { S.formato = e.target.value; render(); });
+$('#v-zona').addEventListener('click', () => { S.vista = 'zona'; render(); });
+$('#v-zonal').addEventListener('click', () => { S.vista = 'zonal'; render(); });
+$('#f-q').addEventListener('input', (e) => { S.q = e.target.value; drawTiendas(build(context())); });
+$('#an-zona').addEventListener('click', () => { AN.vista = 'zona'; AN.sel = ''; drawAnio(); });
+$('#an-zonal').addEventListener('click', () => { AN.vista = 'zonal'; AN.sel = ''; drawAnio(); });
+$('#f-an').addEventListener('change', (e) => { AN.sel = e.target.value; drawAnio(); });
+$('#mx-tabla').addEventListener('click', () => { MX.vista = 'tabla'; drawMatriz(); });
+$('#mx-graf').addEventListener('click', () => { MX.vista = 'graf'; drawMatriz(); });
+$('#f-mt').addEventListener('change', (e) => { MX.tienda = e.target.value; drawMatriz(); });
+$('#f-mq').addEventListener('input', (e) => { MX.q = e.target.value; drawMatriz(); });
+$('#lg-a').style.background = dash.colors[0];
+$('#lg-b').style.background = 'var(--cds-chart-muted)';
+$('#lg-c').style.background = dash.colors[0];
+
+async function cargar() {
+  const q = '?t=' + Date.now();
+  const res = await Promise.all(FUENTES.map((id) => fetch('data/' + id + '.csv' + q, {cache: 'no-store'}).then((r) => { if (!r.ok) throw new Error(id); return r.text(); })));
+  FUENTES.forEach((id, i) => { STORE[id] = d3.csvParse(res[i].trim()); });
+  for (const [id, o] of CALCS) STORE[id] = o.fn(...o.inputs.map((i) => STORE[i]));
+  try {
+    const t = (await fetch('data/actualizado.txt' + q, {cache: 'no-store'}).then((r) => r.text())).trim();
+    const d = new Date(t);
+    if (!isNaN(d)) $('#rg-upd').textContent = 'Actualizado ' + d.toLocaleString('es-PE', {timeZone: 'America/Lima', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false}) + ' (hora de Lima)';
+  } catch (e) {}
+}
+cargar().then(() => {
+  dash.onData(render);
+  setInterval(() => { cargar().then(render).catch(() => {}); }, 120000);
+}).catch(() => { $('#rg-take').textContent = 'No se pudieron cargar los datos. Intenta recargar la página en unos minutos.'; });
+</script>
