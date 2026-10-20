@@ -1,0 +1,18 @@
+name: Explorar base de datos
+
+on:
+  workflow_dispatch:
+
+jobs:
+  explorar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install psycopg2-binary
+      - name: Listar tablas y columnas
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python explorar.py
