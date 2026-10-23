@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Registrate y Gana en tiendas</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -97,6 +98,7 @@ padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-
 
   <div class="rg-filters" id="rg-filters">
     <div class="rg-f"><label for="f-mes">Mes</label><select id="f-mes"></select></div>
+    <div class="rg-f"><label for="f-dia">Día</label><select id="f-dia"></select></div>
     <div class="rg-f"><label for="f-zona">Zona</label><select id="f-zona"></select></div>
     <div class="rg-f"><label for="f-zonal">Zonal</label><select id="f-zonal"></select></div>
     <div class="rg-f"><label for="f-formato">Formato</label><select id="f-formato"></select></div>
@@ -104,11 +106,11 @@ padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-
 
   <div class="rg-kpis" id="rg-kpis">
     <div class="rg-card rg-kpi"><span class="l">Registros (DNI únicos)</span><span class="v" id="k-regs">—</span><span class="n" id="k-regs-n"></span></div>
-    <div class="rg-card rg-kpi"><span class="l">Promedio por día</span><span class="v" id="k-prom">—</span><span class="n" id="k-prom-n"></span></div>
-    <div class="rg-card rg-kpi mt"><span class="l">Meta del mes</span><span class="v" id="k-meta">—</span><span class="n" id="k-meta-n"></span></div>
-    <div class="rg-card rg-kpi mt"><span class="l">Avance sobre la meta</span><span class="v" id="k-cumpl">—</span><span class="n" id="k-cumpl-n"></span></div>
-    <div class="rg-card rg-kpi mt"><span class="l">Ritmo vs lo esperado a la fecha</span><span class="v" id="k-ritmo">—</span><span class="n" id="k-ritmo-n"></span></div>
-    <div class="rg-card rg-kpi mt"><span class="l">Proyección al cierre</span><span class="v" id="k-proy">—</span><span class="n" id="k-proy-n"></span></div>
+    <div class="rg-card rg-kpi"><span class="l" id="k-prom-l">Promedio por día</span><span class="v" id="k-prom">—</span><span class="n" id="k-prom-n"></span></div>
+    <div class="rg-card rg-kpi mt"><span class="l" id="k-meta-l">Meta del mes</span><span class="v" id="k-meta">—</span><span class="n" id="k-meta-n"></span></div>
+    <div class="rg-card rg-kpi mt"><span class="l" id="k-cumpl-l">Avance sobre la meta</span><span class="v" id="k-cumpl">—</span><span class="n" id="k-cumpl-n"></span></div>
+    <div class="rg-card rg-kpi mt" id="kc-ritmo"><span class="l">Ritmo vs lo esperado a la fecha</span><span class="v" id="k-ritmo">—</span><span class="n" id="k-ritmo-n"></span></div>
+    <div class="rg-card rg-kpi" id="kc-proy"><span class="l" id="k-proy-l">Proyección al cierre</span><span class="v" id="k-proy">—</span><span class="n" id="k-proy-n"></span></div>
   </div>
 
   <div class="rg-grid">
@@ -143,6 +145,12 @@ padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-
       <div class="rg-f"><label for="f-q">Buscar tienda</label><input type="search" id="f-q" placeholder="Código o nombre"></div>
     </div>
     <div class="rg-tw"><table id="t-tiendas"></table></div>
+    <ul class="rg-leg" id="t-leg-d" hidden>
+      <li><span class="rg-st st-ok">En meta</span> llegó a su meta del día (meta del mes ÷ días del mes).</li>
+      <li><span class="rg-st st-warn">En riesgo</span> hizo entre el 70% y el 99% de su meta del día.</li>
+      <li><span class="rg-st st-bad">Rezagada</span> hizo menos del 70% de su meta del día.</li>
+      <li><span class="rg-st st-na">Sin meta</span> tienda cerrada, inactiva o sin meta asignada.</li>
+    </ul>
     <ul class="rg-leg" id="t-leg" hidden>
       <li><span class="rg-st st-ok">En meta</span> lleva al menos lo que debería llevar a la fecha para cumplir su meta del mes.</li>
       <li><span class="rg-st st-warn">En riesgo</span> lleva entre el 70% y el 99% de lo que debería llevar a la fecha.</li>
@@ -211,7 +219,7 @@ const fmt = d3.format(',');
 const pc = d3.format('.0%');
 let HM = false;
 const META_KEYS = ['meta', 'metaDia', 'esperado', 'cumpl', 'ritmo', 'estado', 'base'];
-const S = {mes: null, zona: '', zonal: '', formato: '', vista: 'zona', sort: 'ritmo', dir: 1, q: ''};
+const S = {mes: null, dia: 0, zona: '', zonal: '', formato: '', vista: 'zona', sort: 'ritmo', dir: 1, q: ''};
 
 dash.calc('tienda_mes', {
   inputs: ['tiendas', 'metas', 'registros'],
@@ -263,6 +271,19 @@ dash.calc('registros_dia', {
 
 const $ = (s) => document.querySelector(s);
 const ok = (id) => dash.data(id).status === 'ok';
+const DSEM = ['dom','lun','mar','mié','jue','vie','sáb'];
+const isoDia = (mes, n) => mes + '-' + String(n).padStart(2, '0');
+const diaLabel = (mes, n) => n + ' de ' + MESES_L[+mes.slice(5) - 1];
+const pasaFiltro = (r) => (!S.zona || r.zona === S.zona) && (!S.zonal || r.zonal === S.zonal) && (!S.formato || r.formato === S.formato);
+function regsDelDia(iso) {
+  const m = new Map();
+  for (const r of dash.data('registros_dia').data) {
+    if (r.day !== iso) continue;
+    const o = m.get(r.cod) || {regs: 0, brutos: 0};
+    o.regs += r.regs; o.brutos += r.brutos; m.set(r.cod, o);
+  }
+  return m;
+}
 const mesLabel = (m) => MESES_L[+m.slice(5) - 1] + ' ' + m.slice(0, 4);
 
 function context() {
@@ -298,14 +319,21 @@ function stateOf(r) {
 
 function build(ctx) {
   const out = [];
-  for (const r of dash.data('tienda_mes').data) {
-    if (r.mes !== S.mes) continue;
+  const dm = S.dia ? regsDelDia(isoDia(S.mes, S.dia)) : null;
+  for (const r0 of dash.data('tienda_mes').data) {
+    if (r0.mes !== S.mes) continue;
+    let r = r0;
+    if (dm) {
+      // Modo día: registros de ese día y meta del día (meta del mes ÷ días del mes)
+      const d = dm.get(r0.cod) || {regs: 0, brutos: 0};
+      r = Object.assign({}, r0, {regs: d.regs, brutos: d.brutos, dias: 1, meta: r0.meta != null ? r0.meta / r0.dias : null});
+    }
     if (!(r.status === 'Activo' || r.regs > 0)) continue;
     if (S.zona && r.zona !== S.zona) continue;
     if (S.zonal && r.zonal !== S.zonal) continue;
     if (S.formato && r.formato !== S.formato) continue;
     const dias = r.dias;
-    const el = S.mes === ctx.maxMes ? +ctx.maxDay.slice(8) : dias;
+    const el = dm ? 1 : (S.mes === ctx.maxMes ? +ctx.maxDay.slice(8) : dias);
     const meta = (r.meta != null && r.status === 'Activo') ? r.meta : 0;
     const esperado = meta * el / dias;
     out.push({status: r.status, cod: r.cod, nombre: r.nombre, zona: r.zona, zonal: r.zonal, formato: r.formato, v: r.regs, meta, dias, el,
@@ -315,6 +343,8 @@ function build(ctx) {
   for (const r of out) r.st = stateOf(r);
   return out;
 }
+
+function build_mes(ctx) { const d = S.dia; S.dia = 0; try { return build(ctx); } finally { S.dia = d; } }
 
 function agg(list) {
   const a = {n: list.length, v: 0, vMeta: 0, meta: 0, esperado: 0, conMeta: 0, dias: 0, el: 0, brutos: 0, activas: 0};
@@ -335,7 +365,57 @@ function stClass(ritmo, meta) {
   return ritmo >= 1 ? 'ok' : ritmo >= 0.7 ? 'warn' : 'bad';
 }
 
-function kpis(a) {
+function setLabels(dia) {
+  $('#k-prom-l').textContent = dia ? 'Promedio por tienda' : 'Promedio por día';
+  $('#k-meta-l').textContent = dia ? 'Meta del día' : 'Meta del mes';
+  $('#k-cumpl-l').textContent = dia ? 'Avance sobre la meta del día' : 'Avance sobre la meta';
+  $('#k-proy-l').textContent = dia ? 'Vs. mismo día de la semana anterior' : 'Proyección al cierre';
+  $('#k-cumpl').style.color = '';
+}
+
+function prevSemana() {
+  const d = new Date(Date.UTC(+S.mes.slice(0, 4), +S.mes.slice(5) - 1, S.dia - 7));
+  const iso = d.toISOString().slice(0, 10);
+  let v = 0, hay = false;
+  for (const r of dash.data('registros_dia').data) {
+    if (r.day < iso) continue;
+    if (r.day === iso) hay = true;
+    if (r.day !== iso || !pasaFiltro(r)) continue;
+    v += r.regs;
+  }
+  return {iso, v, hay: hay || iso >= '2026-01-01'};
+}
+
+function kpisDia(a, ctx) {
+  const iso = isoDia(S.mes, S.dia);
+  $('#k-regs').textContent = fmt(a.v);
+  $('#k-regs-n').textContent = 'Solo el ' + diaLabel(S.mes, S.dia) + (iso === ctx.maxDay ? ' (día en curso)' : '');
+  $('#k-prom').textContent = a.activas ? d3.format(',.1f')(a.v / a.activas) : '0';
+  $('#k-prom-n').textContent = fmt(a.activas) + ' tiendas con registros';
+  const p = prevSemana();
+  const pd = new Date(p.iso + 'T12:00:00Z');
+  const pl = DSEM[pd.getUTCDay()] + ' ' + pd.getUTCDate() + ' de ' + MESES[pd.getUTCMonth()];
+  if (p.v > 0) {
+    const x = (a.v - p.v) / p.v;
+    $('#k-proy').textContent = (x >= 0 ? '+' : '−') + pc(Math.abs(x));
+    $('#k-proy').style.color = 'var(--color-' + (x >= 0 ? 'ok' : 'bad') + ')';
+  } else { $('#k-proy').textContent = '—'; $('#k-proy').style.color = ''; }
+  $('#k-proy-n').textContent = pl + ': ' + fmt(p.v) + ' registros';
+  $('#kc-ritmo').hidden = true;
+  document.querySelectorAll('.mt').forEach((e) => { if (e.id !== 'kc-ritmo') e.hidden = !HM; });
+  if (!HM) return;
+  $('#k-meta').textContent = fmt(Math.round(a.meta));
+  $('#k-meta-n').textContent = a.conMeta + ' tiendas con meta · meta del mes ÷ días';
+  $('#k-cumpl').textContent = a.cumpl == null ? '—' : pc(a.cumpl);
+  $('#k-cumpl').style.color = a.cumpl == null ? '' : 'var(--color-' + stClass(a.cumpl, 1) + ')';
+  $('#k-cumpl-n').textContent = 'de la meta del día';
+}
+
+function kpis(a, ctx) {
+  setLabels(!!S.dia);
+  $('#k-proy').style.color = '';
+  $('#kc-proy').hidden = S.dia ? false : !HM;
+  if (S.dia) { kpisDia(a, ctx); return; }
   const el = a.el, dias = a.dias;
   $('#k-regs').textContent = fmt(a.v);
   $('#k-regs-n').textContent = el < dias ? 'Del 1 al ' + el + ' de ' + MESES[+S.mes.slice(5) - 1] : 'Mes completo';
@@ -354,7 +434,18 @@ function kpis(a) {
   $('#k-ritmo').style.color = a.ritmo == null ? '' : 'var(--color-' + stClass(a.ritmo, 1) + ')';
 }
 
-function takeaway(a, list) {
+function takeaway(a, list, ctx) {
+  if (S.dia) {
+    const hoy = isoDia(S.mes, S.dia) === ctx.maxDay ? ' (día en curso)' : '';
+    const w = 'El ' + diaLabel(S.mes, S.dia) + hoy + ' hubo ' + fmt(a.v) + ' registros de DNI únicos en ' + fmt(a.activas) + ' tiendas';
+    if (!HM) { $('#rg-take').textContent = w + '.'; return; }
+    const okc = list.filter((r) => r.st.k === 'ok').length;
+    const badc = list.filter((r) => r.st.k === 'bad').length;
+    const tm = list.filter((r) => r.meta > 0).length;
+    $('#rg-take').textContent = w + ': ' + pc(a.cumpl) + ' de la meta del día (' + fmt(Math.round(a.meta)) + '). ' + okc + ' de ' + tm +
+      ' tiendas con meta llegaron a su meta del día y ' + badc + ' quedaron por debajo del 70%.';
+    return;
+  }
   const when = a.el < a.dias ? 'Al ' + a.el + ' de ' + MESES_L[+S.mes.slice(5) - 1] : 'En ' + mesLabel(S.mes);
   if (!HM) { $('#rg-take').textContent = when + ' hay ' + fmt(a.v) + ' registros de DNI únicos, unos ' + fmt(Math.round(a.v / (a.el || 1))) + ' por día. La meta está definida solo para el mes en curso.'; return; }
   const bad = list.filter((r) => r.st.k === 'bad').length;
@@ -425,8 +516,9 @@ function drawDaily(a) {
   svg.append('g').selectAll('rect').data(data.filter((d) => d.v != null)).join('rect')
     .attr('x', (d) => x(d.n)).attr('width', x.bandwidth()).attr('y', (d) => y(d.v)).attr('height', (d) => Math.max(0, y(0) - y(d.v)))
     .attr('rx', Math.min(4, x.bandwidth() / 2))
+    .style('opacity', (d) => (S.dia && d.n !== S.dia) ? 0.35 : 1)
     .attr('fill', (d) => (metaDia > 0 && d.v < metaDia) ? 'var(--cds-chart-muted)' : 'var(--cds-chart-status-neutral, ' + dash.colors[0] + ')')
-    .style('fill', (d) => (metaDia > 0 && d.v < metaDia) ? 'var(--cds-chart-muted)' : dash.colors[0]);
+    .style('fill', (d) => S.dia === d.n ? 'var(--brand-red)' : (metaDia > 0 && d.v < metaDia) ? 'var(--cds-chart-muted)' : dash.colors[0]);
   if (metaDia > 0) {
     svg.append('line').attr('x1', m.l).attr('x2', w - m.r).attr('y1', y(metaDia)).attr('y2', y(metaDia))
       .attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '4 4').attr('stroke-width', 1.5);
@@ -439,8 +531,10 @@ function drawDaily(a) {
     .attr('x', (d) => x(d.n) - 2).attr('width', x.bandwidth() + 4).attr('y', m.t).attr('height', h - m.b - m.t).attr('fill', 'transparent')
     .on('mousemove', (event, d) => {
       if (d.v == null) { t.style.display = 'none'; return; }
-      showTip(el, t, event, d.n + ' de ' + MESES[+S.mes.slice(5) - 1], [fmt(d.v) + ' registros', metaDia > 0 ? pc(d.v / metaDia) + ' de la meta diaria' : '']);
-    }).on('mouseleave', () => { t.style.display = 'none'; });
+      showTip(el, t, event, d.n + ' de ' + MESES[+S.mes.slice(5) - 1], [fmt(d.v) + ' registros', metaDia > 0 ? pc(d.v / metaDia) + ' de la meta diaria' : '', S.dia === d.n ? 'Toca de nuevo para ver todo el mes' : 'Toca para ver solo este día']);
+    }).on('mouseleave', () => { t.style.display = 'none'; })
+    .style('cursor', (d) => d.v == null ? 'default' : 'pointer')
+    .on('click', (event, d) => { if (d.v == null) return; S.dia = S.dia === d.n ? 0 : d.n; t.style.display = 'none'; render(); });
 }
 
 function drawAcum(a) {
@@ -466,6 +560,11 @@ function drawAcum(a) {
   const pts = data.filter((d) => d.cum != null);
   svg.append('path').attr('d', d3.line().x((d) => x(d.n)).y((d) => y(d.cum))(pts)).attr('fill', 'none')
     .style('stroke', dash.colors[0]).attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+  if (S.dia) {
+    svg.append('line').attr('x1', x(S.dia)).attr('x2', x(S.dia)).attr('y1', m.t).attr('y2', h - m.b)
+      .style('stroke', 'var(--brand-red)').attr('stroke-dasharray', '3 3').attr('stroke-width', 1.5);
+    svg.append('text').attr('x', x(S.dia) + 4).attr('y', m.t + 10).style('fill', 'var(--color-fg)').text('Día ' + S.dia);
+  }
   const last = pts[pts.length - 1];
   if (last) {
     svg.append('circle').attr('cx', x(last.n)).attr('cy', y(last.cum)).attr('r', 4).style('fill', dash.colors[0])
@@ -523,13 +622,13 @@ function drawGroups(list) {
   for (const r of list) { const k = r[key] || 'Sin dato'; if (!g.has(k)) g.set(k, []); g.get(k).push(r); }
   const rows = [...g.entries()].map(([k, l]) => ({k, a: agg(l), otro: key === 'zona' ? [...new Set(l.map((x) => x.zonal))].join(', ') : [...new Set(l.map((x) => x.zona))].join(', ')}));
   rows.sort((p, q) => HM ? (p.a.ritmo ?? 9) - (q.a.ritmo ?? 9) : q.a.v - p.a.v);
-  $('#g-note').textContent = HM ? 'Registros y avance sobre la meta del mes por grupo.' : 'Registros por grupo. La meta solo existe para el mes en curso.';
+  $('#g-note').textContent = S.dia ? (HM ? 'Registros y avance sobre la meta del día ' + S.dia + ' por grupo.' : 'Registros del día ' + S.dia + ' por grupo.') : HM ? 'Registros y avance sobre la meta del mes por grupo.' : 'Registros por grupo. La meta solo existe para el mes en curso.';
   const tbl = $('#t-grupo');
   tbl.replaceChildren();
   const thead = document.createElement('thead'); const hr = document.createElement('tr');
   th(hr, key === 'zona' ? 'Zona' : 'Zonal', '', 't'); th(hr, key === 'zona' ? 'Zonal' : 'Zona', '', 't opt');
   th(hr, 'Tiendas'); th(hr, 'Registros');
-  if (HM) { th(hr, 'Meta'); th(hr, 'Avance sobre la meta'); } else th(hr, 'Promedio por día');
+  if (HM) { th(hr, S.dia ? 'Meta del día' : 'Meta'); th(hr, 'Avance sobre la meta'); } else th(hr, S.dia ? 'Tiendas con registros' : 'Promedio por día');
   thead.appendChild(hr); tbl.appendChild(thead);
   const tb = document.createElement('tbody');
   for (const r of rows) {
@@ -537,7 +636,7 @@ function drawGroups(list) {
     td(tr, r.k, 't'); td(tr, r.otro, 't opt');
     td(tr, fmt(r.a.n)); td(tr, fmt(r.a.v));
     if (HM) { td(tr, fmt(Math.round(r.a.meta))); barCell(tr, r.a.cumpl, r.a.meta, r.a.ritmo, r.a.el, r.a.dias); }
-    else td(tr, fmt(Math.round(r.a.v / (r.a.el || 1))));
+    else td(tr, S.dia ? fmt(r.a.activas) : fmt(Math.round(r.a.v / (r.a.el || 1))));
     tb.appendChild(tr);
   }
   tbl.appendChild(tb);
@@ -560,11 +659,13 @@ function drawTiendas(list) {
   th(hr, 'Tienda', 'nombre', 't', true); th(hr, 'Zona', 'zona', 't', true); th(hr, 'Zonal', 'zonal', 't opt', true); th(hr, 'Formato', 'formato', 't opt', true);
   th(hr, 'Registros', 'v', '', true);
   if (HM) {
-    th(hr, 'Meta mes', 'meta', '', true); th(hr, 'Meta/día', 'metaDia', 'opt', true);
+    th(hr, S.dia ? 'Meta día' : 'Meta mes', 'meta', '', true); if (!S.dia) th(hr, 'Meta/día', 'metaDia', 'opt', true);
     th(hr, 'Avance', 'cumpl', '', true); th(hr, 'Estado', 'estado', 't', true); th(hr, 'Base de la meta', 'base', 't opt', true);
   }
   thead.appendChild(hr); tbl.appendChild(thead);
-  $('#t-leg').hidden = !HM;
+  $('#t-leg').hidden = !HM || !!S.dia;
+  $('#t-leg-d').hidden = !HM || !S.dia;
+  if (S.dia) $('#t-note').textContent = fmt(rows.length) + ' tiendas · registros del ' + diaLabel(S.mes, S.dia) + ' · ordena con los títulos de columna';
   const tb = document.createElement('tbody');
   for (const r of rows) {
     const tr = document.createElement('tr');
@@ -572,8 +673,8 @@ function drawTiendas(list) {
     td(tr, r.zona, 't'); td(tr, r.zonal, 't opt'); td(tr, r.formato, 't opt');
     td(tr, fmt(r.v));
     if (HM) {
-      td(tr, r.meta > 0 ? fmt(Math.round(r.meta)) : '—');
-      td(tr, r.meta > 0 ? fmt(Math.round(r.metaDia)) : '—', 'opt');
+      td(tr, r.meta > 0 ? (S.dia && r.meta < 10 ? d3.format('.1f')(r.meta) : fmt(Math.round(r.meta))) : '—');
+      if (!S.dia) td(tr, r.meta > 0 ? fmt(Math.round(r.metaDia)) : '—', 'opt');
       barCell(tr, r.cumpl, r.meta, r.ritmo, r.el, r.dias);
       const e = document.createElement('td'); e.className = 't';
       const sp = document.createElement('span'); sp.className = 'rg-st st-' + r.st.k; sp.textContent = r.st.t; e.appendChild(sp); tr.appendChild(e);
@@ -833,6 +934,15 @@ function render() {
   const meses = [...new Set(dash.data('registros_dia').data.map((r) => r.mes))].sort();
   if (!S.mes) S.mes = ctx.maxMes;
   fillSelect($('#f-mes'), meses.map((m) => ({value: m, label: mesLabel(m)})).reverse(), S.mes, null);
+  const dimes = new Date(Date.UTC(+S.mes.slice(0, 4), +S.mes.slice(5), 0)).getUTCDate();
+  const ult = S.mes === ctx.maxMes ? +ctx.maxDay.slice(8) : dimes;
+  if (S.dia > ult) S.dia = 0;
+  const dOpts = [];
+  for (let n = ult; n >= 1; n--) {
+    const wd = new Date(Date.UTC(+S.mes.slice(0, 4), +S.mes.slice(5) - 1, n)).getUTCDay();
+    dOpts.push({value: String(n), label: DSEM[wd] + ' ' + n + ' ' + MESES[+S.mes.slice(5) - 1]});
+  }
+  fillSelect($('#f-dia'), dOpts, S.dia ? String(S.dia) : '', 'Todos los días');
   const tiendas = dash.data('tiendas').data;
   const zonas = [...new Set(tiendas.map((t) => t.zona))].sort();
   fillSelect($('#f-zona'), zonas, S.zona, 'Todas las zonas');
@@ -844,18 +954,21 @@ function render() {
   $('#v-zonal').setAttribute('aria-pressed', S.vista === 'zonal');
   const list = build(ctx);
   HM = list.some((r) => r.meta > 0);
+  // Los gráficos de días siempre muestran el mes completo
+  const aMes = S.dia ? agg(build_mes(ctx)) : null;
   if (!HM && META_KEYS.includes(S.sort)) { S.sort = 'v'; S.dir = -1; }
   const a = agg(list);
   $('#c-acum').hidden = !HM;
   $('#lg-b-w').hidden = !HM;
   $('#lg-a-t').textContent = HM ? 'Día sobre la meta diaria' : 'Registros del día';
-  $('#note-d').textContent = HM ? 'Barras por día; la línea punteada es la meta diaria (meta del mes ÷ días del mes).' : 'Registros de DNI únicos por día. La meta solo existe para el mes en curso.';
-  kpis(a); takeaway(a, list);
-  drawDaily(a); drawAcum(a);
+  $('#note-d').textContent = (HM ? 'Barras por día; la línea punteada es la meta diaria (meta del mes ÷ días del mes).' : 'Registros de DNI únicos por día. La meta solo existe para el mes en curso.') + ' Toca una barra para ver solo ese día.';
+  kpis(a, ctx); takeaway(a, list, ctx);
+  drawDaily(aMes || a); drawAcum(aMes || a);
   drawGroups(list); drawTiendas(list); drawAnio(); drawMatriz();
 }
 
-$('#f-mes').addEventListener('change', (e) => { S.mes = e.target.value; render(); });
+$('#f-mes').addEventListener('change', (e) => { S.mes = e.target.value; S.dia = 0; render(); });
+$('#f-dia').addEventListener('change', (e) => { S.dia = Number(e.target.value) || 0; render(); });
 $('#f-zona').addEventListener('change', (e) => { S.zona = e.target.value; render(); });
 $('#f-zonal').addEventListener('change', (e) => { S.zonal = e.target.value; render(); });
 $('#f-formato').addEventListener('change', (e) => { S.formato = e.target.value; render(); });
