@@ -1,0 +1,178 @@
+cod,nombre,zona,zonal,formato,categoria,status
+A01,Check In,Lima Norte,Maxi Sandoval,Aeropuertos,Oro,Activo
+A02,Nacional,Lima Norte,Maxi Sandoval,Aeropuertos,Bronce,Activo
+A03,Market,Lima Norte,Maxi Sandoval,Aeropuertos,Bronce,Activo
+B11,Real Plaza Santa Clara,Lima Este,Ernesto Boitano,Mall,Plata,Activo
+B13,Plaza Vea Chincha,Centro Oriente,Katherine Mallqui,Strip Center,Plata,Activo
+B17,Plaza del Sol Huacho,Norte II,Gustavo Calderón,Mall,Plata,Activo
+B22,Mall Aventura Plaza Arequipa,Sur,Anthony Pardo,Mall,Oro,Activo
+B25,Real Plaza Piura,Norte I,Josmell Chuquiqusma,Mall,Oro,Activo
+B30,Caminos del Inca,Lima Oeste I,Paola Pelaez,Mall,Plata,Cerrado
+B35,Tarapoto,Norte I,Josmell Chuquiqusma,Stand Alone,Bronce,Activo
+B39,Real Plaza Chorrillos,Lima Sur,Luis Bejarano,Strip Center,Bronce,Activo
+B42,Metro Ventanilla,Lima Norte,Maxi Sandoval,Strip Center,Plata,Activo
+B50,MegaPlaza Chimbote,Norte II,Gustavo Calderón,Mall,Plata,Activo
+B54,Metro Plaza Norte,Lima Norte,Maxi Sandoval,Salida De Caja,Bronce,Activo
+B55,Larco,Lima Oeste I,Paola Pelaez,Stand Alone,Oro,Activo
+B57,La Rambla San Borja,Top,Juan Pablo Chero,Mall,Platino,Activo
+B58,Real Plaza Huánuco,Centro Oriente,Katherine Mallqui,Mall,Oro,Activo
+B59,Plaza Vea Huaral,Norte II,Gustavo Calderón,Strip Center,Bronce,Activo
+B61,Aeropuerto I,Lima Norte,Maxi Sandoval,Aeropuertos,Oro,Cerrado
+B62,Pardo,Lima Oeste I,Paola Pelaez,Stand Alone,Plata,Activo
+B70,Cerro Colorado- Arequipa,Sur,Anthony Pardo,Mall,Bronce,Activo
+B77,Metro Balta Chiclayo,Norte I,Josmell Chuquiqusma,Strip Center,Bronce,Activo
+B82,Open Plaza Pucallpa,Centro Oriente,Katherine Mallqui,Mall,Plata,Activo
+B83,Ayacucho,Centro Oriente,Katherine Mallqui,Stand Alone,Plata,Activo
+B84,Real Plaza Cusco,Sur,Anthony Pardo,Mall,Oro,Activo
+B85,Real Plaza Cajamarca,Norte I,Josmell Chuquiqusma,Mall,Bronce,Activo
+B90,Real Plaza Salaverry,Top,Juan Pablo Chero,Mall,Diamante,Activo
+B92,28 DE JULIO,Lima Oeste I,Paola Pelaez,Strip Center,Plata,Activo
+B98,Minka I,Lima Centro,Rossana Garcia,Mall,Bronce,Activo
+F03,Corner Falabella Jockey Plaza,Lima Oeste II,Sebastían Martinez,Corner,Bronce,Activo
+F04,Corner Falabella San Miguel,Top,Juan Pablo Chero,Corner,Bronce,Activo
+F05,Corner Falabella Mega Plaza,Lima Norte,Maxi Sandoval,Corner,Bronce,Activo
+F06,Corner Falabella Plaza Norte,Lima Norte,Maxi Sandoval,Corner,Bronce,Activo
+F07,Corner Falabella Mall del Sur,Lima Sur,Luis Bejarano,Corner,Bronce,Activo
+H01,El Polo,Lima Oeste II,Sebastían Martinez,Strip Center,Bronce,Activo
+H02,Portal Trujillo,Norte II,Gustavo Calderón,Mall,Bronce,Activo
+H03,Royal Plaza,Lima Norte,Maxi Sandoval,Mall,Bronce,Activo
+H04,Jesus María,Lima Centro,Rossana Garcia,Stand Alone,Bronce,Activo
+H05,Pardo II,Lima Oeste I,Paola Pelaez,Stand Alone,Bronce,Activo
+H06,Plaza Vea Talara,Norte I,Josmell Chuquiqusma,Strip Center,Bronce,Activo
+H07,Real Plaza Piura II,Norte I,Josmell Chuquiqusma,Mall,Bronce,Activo
+H08,Primax Jockey Plaza,Lima Oeste II,Sebastían Martinez,Strip Center,Bronce,Activo
+H09,Huanuco Plaza de Armas,Centro Oriente,Katherine Mallqui,Stand Alone,Bronce,Activo
+H10,Puruchuco II,Lima Este,Ernesto Boitano,Mall,Bronce,Activo
+H11,Izaguirre,Lima Norte,Maxi Sandoval,Stand Alone,Bronce,Activo
+H12,Canaval y Moreyra,Lima Oeste I,Paola Pelaez,Stand Alone,Bronce,Activo
+H13,RP Sullana,Norte I,Josmell Chuquiqusma,Strip Center,Bronce,Activo
+H14,Abancay,Sur,Anthony Pardo,Stand Alone,Bronce,Activo
+H15,Gran Chimú,Lima Este,Ernesto Boitano,Stand Alone,Bronce,Activo
+H16,San Juan Miraflores,Lima Sur,Luis Bejarano,Stand Alone,Bronce,Activo
+H17,Golf Trujillo,Norte II,Gustavo Calderón,Strip Center,Bronce,Inactivo
+H18,VES Av. Revolución,Lima Sur,Luis Bejarano,Stand Alone,Bronce,Activo
+H19,Miraflores Óvalo GutiÉrrez,Lima Oeste I,Paola Pelaez,Stand Alone,Bronce,Activo
+H20,Huaraz,Norte II,Gustavo Calderón,Stand Alone,Bronce,Activo
+H21,Chancay,Norte II,Gustavo Calderón,Stand Alone,Bronce,Activo
+H22,Chincha Alta,Centro Oriente,Katherine Mallqui,Stand Alone,Bronce,Activo
+H23,Mall Aventura Bellavista II,Lima Centro,Rossana Garcia,Mall,Plata,Activo
+H24,Open Plaza Piura III,Norte I,Josmell Chuquiqusma,Mall,Oro,Activo
+H25,Próspero Iquitos,Centro Oriente,Katherine Mallqui,Stand Alone,Bronce,Activo
+H26,Larco Trujillo,Norte II,Gustavo Calderón,Stand Alone,Bronce,Inactivo
+K06,Salaverry,Lima Centro,Rossana Garcia,Stand Alone,Oro,Activo
+K11,Plaza San Miguel,Top,Juan Pablo Chero,Mall,Diamante,Activo
+K16,Real Plaza Primavera,Lima Oeste II,Sebastían Martinez,Mall,Plata,Activo
+K18,Yanahuara Cayma,Sur,Anthony Pardo,Stand Alone,Bronce,Activo
+K20,Mercaderes,Sur,Anthony Pardo,Stand Alone,Plata,Activo
+K21,Plaza del Sol Piura,Norte I,Josmell Chuquiqusma,Mall,Bronce,Activo
+K22,La Molina,Lima Este,Ernesto Boitano,Mall,Oro,Activo
+K24,Real Plaza Chiclayo,Norte I,Josmell Chuquiqusma,Mall,Plata,Activo
+K25,Plaza Lima Sur,Lima Sur,Luis Bejarano,Mall,Plata,Activo
+K28,El Quinde Cajamarca,Norte I,Josmell Chuquiqusma,Mall,Plata,Activo
+K31,Trujillo Centro,Norte II,Gustavo Calderón,Stand Alone,Bronce,Cerrado
+K34,Av. Benavides,Lima Oeste I,Paola Pelaez,Stand Alone,Plata,Activo
+K36,Chacarilla,Lima Oeste II,Sebastían Martinez,Stand Alone,Plata,Activo
+K38,Cusco Av. La Cultura,Sur,Anthony Pardo,Stand Alone,Bronce,Activo
+K39,Real Plaza Trujillo,Norte II,Gustavo Calderón,Mall,Oro,Cerrado
+K40,Cusco Av. El Sol,Sur,Anthony Pardo,Stand Alone,Bronce,Activo
+K42,Mall Aventura Trujillo,Norte II,Gustavo Calderón,Mall,Platino,Cerrado
+K43,MegaPlaza I,Lima Norte,Maxi Sandoval,Mall,Plata,Activo
+K46,Chimbote,Norte II,Gustavo Calderón,Stand Alone,Bronce,Activo
+K47,Morelli,Lima Oeste II,Sebastían Martinez,Stand Alone,Bronce,Activo
+K49,Real Plaza Uniplaza,Lima Norte,Maxi Sandoval,Mall,Plata,Activo
+K50,Ica Centro,Centro Oriente,Katherine Mallqui,Stand Alone,Bronce,Activo
+K53,Sullana,Norte I,Josmell Chuquiqusma,Strip Center,Bronce,Activo
+K55,Open Plaza Canta Callao,Lima Norte,Maxi Sandoval,Strip Center,Plata,Activo
+K58,Jirón de la Unión,Lima Centro,Rossana Garcia,Stand Alone,Bronce,Activo
+K60,Open Plaza Trujillo,Norte II,Gustavo Calderón,Strip Center,Bronce,Activo
+K61,Real Plaza Huancayo,Centro Oriente,Katherine Mallqui,Mall,Oro,Activo
+K62,Mall Aventura Bellavista,Lima Centro,Rossana Garcia,Mall,Plata,Cerrado
+K63,Av. La Encalada,Lima Oeste II,Sebastían Martinez,Stand Alone,Plata,Activo
+K67,Huaraz,Norte II,Gustavo Calderón,Stand Alone,Plata,Activo
+K69,Sodimac La Marina,Lima Centro,Rossana Garcia,Salida De Caja,Bronce,Activo
+K71,Plaza Norte,Top,Juan Pablo Chero,Mall,Platino,Activo
+K72,Iquitos Maynas,Centro Oriente,Katherine Mallqui,Stand Alone,Plata,Activo
+K73,Real Plaza Juliaca,Sur,Anthony Pardo,Mall,Plata,Activo
+K74,Metro San Juan de Lurigancho,Lima Este,Ernesto Boitano,Salida De Caja,Plata,Activo
+K75,Real Plaza Centro Cívico,Top,Juan Pablo Chero,Mall,Diamante,Activo
+K76,MegaPlaza Los Cedros- Chorrillos,Lima Sur,Luis Bejarano,Strip Center,Bronce,Activo
+K96,Open Plaza Angamos,Top,Juan Pablo Chero,Mall,Oro,Activo
+M01,Módulo Primavera,Lima Oeste I,Paola Pelaez,Módulo,Módulo,Cerrado
+M02,Módulo Plaza San Miguel,Lima Centro,Rossana Garcia,Módulo,Módulo,Cerrado
+M03,Modulo Coolcase RP Centro Civico,Top,Juan Pablo Chero,Módulo,Módulo,Cerrado
+M04,Módulo Coolcase Mall Comas,Lima Norte,Maxi Sandoval,Módulo,Módulo,Cerrado
+M05,Módulo CC Open Plaza Angamos,Lima Oeste I,Paola Pelaez,Módulo,Módulo,Cerrado
+M06,Módulo CC Real Plaza Trujillo,Norte II,Gustavo Calderón,Módulo,Módulo,Cerrado
+M07,Módulo CC Real Plaza Juliaca,Sur,Anthony Pardo,Módulo,Módulo,Activo
+M08,Módulo CC Mall Plaza Bellavista,Lima Centro,Rossana Garcia,Módulo,Módulo,Cerrado
+M09,Módulo CC Mall Plaza Trujillo,Norte II,Gustavo Calderón,Módulo,Módulo,Cerrado
+M10,MODULO COOLCASE SALAVERRY,Lima Centro,Rossana Garcia,Módulo,Módulo,Activo
+M11,MODULO CC PLAZA LIMA SUR,Lima Sur,Luis Bejarano,Módulo,Módulo,Cerrado
+M12,MODULO CC REAL PLAZA PUCALLPA,Centro Oriente,Katherine Mallqui,Módulo,Módulo,Activo
+M13,Modulo CC Minka,Lima Centro,Rossana Garcia,Módulo,Módulo,Cerrado
+M14,MODULO CC MALL SANTA ANITA,Lima Este,Ernesto Boitano,Módulo,Módulo,Cerrado
+M15,MODULO CC PLAZA LIMA NORTE,Lima Norte,Maxi Sandoval,Módulo,Módulo,Cerrado
+M16,Modulo CC Real Plaza Primavera,Lima Oeste II,Sebastían Martinez,Módulo,Módulo,Activo
+T04,Mall Aventura Santa Anita,Lima Este,Ernesto Boitano,Mall,Oro,Activo
+T05,MegaPlaza II,Lima Norte,Maxi Sandoval,Mall,Oro,Activo
+T06,El Quinde Ica,Centro Oriente,Katherine Mallqui,Mall,Oro,Activo
+T07,La Rambla Brasil,Lima Centro,Rossana Garcia,Mall,Plata,Activo
+T10,Av. Cavenecia,Lima Oeste I,Paola Pelaez,Stand Alone,Plata,Activo
+T15,Mega Plaza Pisco,Centro Oriente,Katherine Mallqui,Strip Center,Plata,Activo
+T16,Open Plaza Huánuco,Centro Oriente,Katherine Mallqui,Mall,Plata,Activo
+T19,Jockey Plaza II,Top,Juan Pablo Chero,Mall,Platino,Activo
+T21,Real Plaza Pucallpa,Centro Oriente,Katherine Mallqui,Mall,Plata,Activo
+T22,Mall del Sur,Lima Sur,Luis Bejarano,Mall,Plata,Activo
+T24,Plaza Vea Moquegua,Sur,Anthony Pardo,Strip Center,Bronce,Activo
+T26,Plaza Vea Talara,Norte I,Josmell Chuquiqusma,Strip Center,Bronce,Cerrado
+T28,Real Plaza Arequipa II,Sur,Anthony Pardo,Mall,Bronce,Activo
+T29,Aeropuerto Internacional,Lima Norte,Maxi Sandoval,Aeropuertos,Oro,Cerrado
+T40,Costamar Plaza Tumbes,Norte I,Josmell Chuquiqusma,Mall,Bronce,Activo
+T41,Real Plaza Villa María del Triunfo,Lima Sur,Luis Bejarano,Mall,Plata,Activo
+T42,Open Plaza Huancayo,Centro Oriente,Katherine Mallqui,Mall,Plata,Activo
+T43,Mall Aventura Trujillo II,Norte II,Gustavo Calderón,Mall,Plata,Activo
+T44,Begonias II,Lima Oeste I,Paola Pelaez,Stand Alone,Oro,Activo
+T47,Mall Plaza Cayma,Sur,Anthony Pardo,Mall,Plata,Activo
+T49,Mall del Sur II,Lima Sur,Luis Bejarano,Mall,Plata,Activo
+T50,Plaza San Miguel II,Top,Juan Pablo Chero,Mall,Plata,Activo
+T51,Plaza Vea Tarapoto,Norte I,Josmell Chuquiqusma,Strip Center,Bronce,Activo
+T52,Plaza Vea Ilo,Sur,Anthony Pardo,Salida De Caja,Bronce,Activo
+T54,Aeropuerto II,Lima Norte,Maxi Sandoval,Aeropuertos,Bronce,Cerrado
+T59,Plaza Norte II,Lima Norte,Maxi Sandoval,Mall,Plata,Activo
+T61,Jockey Plaza,Top,Juan Pablo Chero,Mall,Platino,Cerrado
+T65,Real Plaza Puruchuco I,Lima Este,Ernesto Boitano,Mall,Oro,Activo
+T66,Puruchuco II,Lima Este,Ernesto Boitano,Mall,Plata,Cerrado
+T69,Mall Aventura Chiclayo,Norte I,Josmell Chuquiqusma,Mall,Oro,Cerrado
+T70,Mall Comas,Top,Juan Pablo Chero,Mall,Platino,Activo
+T71,Open Plaza Atocongo II,Lima Sur,Luis Bejarano,Mall,Bronce,Activo
+T72,Open Plaza Piura II,Norte I,Josmell Chuquiqusma,Mall,Oro,Cerrado
+T73,Megaplaza III,Lima Norte,Maxi Sandoval,Mall,Oro,Activo
+T74,Chacarilla II,Lima Oeste II,Sebastían Martinez,Strip Center,Bronce,Activo
+T75,MALL PLAZA TRUJILLO III,Norte II,Gustavo Calderón,Mall,Plata,Activo
+T76,Cencosud La Molina,Lima Este,Ernesto Boitano,Mall,Bronce,Activo
+T77,Plaza del Sol Ica II,Centro Oriente,Katherine Mallqui,Mall,Bronce,Activo
+T78,Mall Iquitos,Centro Oriente,Katherine Mallqui,Mall,Plata,Activo
+T79,Mall Aventura SJL,Lima Este,Ernesto Boitano,Mall,Plata,Activo
+T80,Metro Chaclacayo,Lima Este,Ernesto Boitano,Strip Center,Bronce,Activo
+T81,MALL AVENTURA CHICLAYO,Norte I,Josmell Chuquiqusma,Mall,Bronce,Activo
+T82,Metro Faucett,Lima Centro,Rossana Garcia,Salida De Caja,Bronce,Activo
+T83,Tottus Huaylas,Lima Sur,Luis Bejarano,Salida De Caja,Bronce,Activo
+T84,Plaza Vea Bolichera,Lima Sur,Luis Bejarano,Strip Center,Bronce,Activo
+T85,Plaza Vea Higuereta,Lima Oeste I,Paola Pelaez,Strip Center,Bronce,Activo
+T86,Plaza Vea Jockey Plaza,Lima Oeste II,Sebastían Martinez,Salida De Caja,Bronce,Activo
+T87,Strip Fibra,Lima Centro,Rossana Garcia,Strip Center,Bronce,Activo
+T88,Metro Canadá,Lima Oeste II,Sebastían Martinez,Strip Center,Bronce,Activo
+T89,Plaza Vea Ayacucho,Lima Oeste I,Paola Pelaez,Salida De Caja,Bronce,Activo
+T90,Plaza Vea VES,Lima Sur,Luis Bejarano,Strip Center,Bronce,Activo
+T91,Plaza Vea Tacna,Sur,Anthony Pardo,Salida De Caja,Bronce,Activo
+T92,SAN LUIS,Lima Oeste II,Sebastían Martinez,Stand Alone,Bronce,Activo
+T93,KM-40,Lima Sur,Luis Bejarano,Strip Center,Bronce,Activo
+T94,Plaza Vea Lurin,Lima Sur,Luis Bejarano,Salida De Caja,Bronce,Activo
+T95,Plaza Vea ATE,Lima Este,Ernesto Boitano,Salida De Caja,Bronce,Activo
+T96,Plaza de la Luna,Norte I,Josmell Chuquiqusma,Mall,Bronce,Activo
+T97,Real Plaza Cusco II,Sur,Anthony Pardo,Mall,Bronce,Activo
+T98,Magdalena,Lima Centro,Rossana Garcia,Stand Alone,Bronce,Activo
+T99,Plaza San Miguel III,Top,Juan Pablo Chero,Strip Center,Bronce,Activo
+U01,Urban Rider Benavides,Lima Oeste I,Paola Pelaez,Stand Alone,Bronce,Cerrado
+U03,Urban Rider San Miguel,Lima Centro,Rossana Garcia,Stand Alone,Bronce,Cerrado
+U07,URBAN RIDER SALAVERRY,Lima Oeste I,Paola Pelaez,Stand Alone,Bronce,Cerrado
