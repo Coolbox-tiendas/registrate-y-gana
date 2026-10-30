@@ -49,14 +49,16 @@ H13,RP Sullana,Norte I,Josmell Chuquiqusma,Strip Center,Bronce,Activo
 H14,Abancay,Sur,Anthony Pardo,Stand Alone,Bronce,Activo
 H15,Gran Chimú,Lima Este,Ernesto Boitano,Stand Alone,Bronce,Activo
 H16,San Juan Miraflores,Lima Sur,Luis Bejarano,Stand Alone,Bronce,Activo
-H17,Golf Trujillo,Norte II,Gustavo Calderón,Stand Alone,Bronce,Inactivo
+H17,Golf Trujillo,Norte II,Gustavo Calderón,Strip Center,Bronce,Inactivo
 H18,VES Av. Revolución,Lima Sur,Luis Bejarano,Stand Alone,Bronce,Activo
 H19,Miraflores Óvalo GutiÉrrez,Lima Oeste I,Paola Pelaez,Stand Alone,Bronce,Activo
 H20,Huaraz,Norte II,Gustavo Calderón,Stand Alone,Bronce,Activo
 H21,Chancay,Norte II,Gustavo Calderón,Stand Alone,Bronce,Activo
 H22,Chincha Alta,Centro Oriente,Katherine Mallqui,Stand Alone,Bronce,Activo
-H23,Mall Aventura Bellavista II,Lima Centro,Rossana Garcia,Mall,Plata,Inactivo
+H23,Mall Aventura Bellavista II,Lima Centro,Rossana Garcia,Mall,Plata,Activo
 H24,Open Plaza Piura III,Norte I,Josmell Chuquiqusma,Mall,Oro,Activo
+H25,Próspero Iquitos,Centro Oriente,Katherine Mallqui,Stand Alone,Bronce,Activo
+H26,Larco Trujillo,Norte II,Gustavo Calderón,Stand Alone,Bronce,Inactivo
 K06,Salaverry,Lima Centro,Rossana Garcia,Stand Alone,Oro,Activo
 K11,Plaza San Miguel,Top,Juan Pablo Chero,Mall,Diamante,Activo
 K16,Real Plaza Primavera,Lima Oeste II,Sebastían Martinez,Mall,Plata,Activo
@@ -84,7 +86,7 @@ K55,Open Plaza Canta Callao,Lima Norte,Maxi Sandoval,Strip Center,Plata,Activo
 K58,Jirón de la Unión,Lima Centro,Rossana Garcia,Stand Alone,Bronce,Activo
 K60,Open Plaza Trujillo,Norte II,Gustavo Calderón,Strip Center,Bronce,Activo
 K61,Real Plaza Huancayo,Centro Oriente,Katherine Mallqui,Mall,Oro,Activo
-K62,Mall Aventura Bellavista,Lima Centro,Rossana Garcia,Mall,Plata,Activo
+K62,Mall Aventura Bellavista,Lima Centro,Rossana Garcia,Mall,Plata,Cerrado
 K63,Av. La Encalada,Lima Oeste II,Sebastían Martinez,Stand Alone,Plata,Activo
 K67,Huaraz,Norte II,Gustavo Calderón,Stand Alone,Plata,Activo
 K69,Sodimac La Marina,Lima Centro,Rossana Garcia,Salida De Caja,Bronce,Activo
