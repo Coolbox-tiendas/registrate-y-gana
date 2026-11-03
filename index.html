@@ -45,6 +45,20 @@ padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-
 .rg-tip .h{color:var(--cds-text-secondary)}
 .rg-leg{display:flex;flex-wrap:wrap;gap:14px;font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin-top:6px}
 .rg-leg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.rg-btn{font:inherit;font-size:var(--cds-font-size-body);font-weight:600;color:#fff;background:var(--brand-red);border:0;border-radius:var(--cds-radius);padding:8px 14px;cursor:pointer;white-space:nowrap}
+.rg-btn.sec{background:transparent;color:var(--color-fg);border:1px solid var(--color-border-line)}
+.rg-btn:disabled{opacity:.5;cursor:default}
+.qr-wrap{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:var(--cds-gap-lg);align-items:start}
+@container (max-width:640px){.qr-wrap{grid-template-columns:1fr}}
+.qr-wrap canvas{width:100%;height:auto;border:1px solid var(--color-border-line);border-radius:var(--cds-radius);background:#fff}
+.qr-side{display:flex;flex-direction:column;gap:var(--cds-gap-md);font-size:var(--cds-font-size-body)}
+.qr-side a{color:inherit;word-break:break-all}
+.qr-acts{display:flex;gap:8px;flex-wrap:wrap}
+.qr-link{display:inline-block;margin-top:6px;font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.mail-prev td,.mail-prev th{font-variant-numeric:tabular-nums}
+.mail-prev{background:#fff;color:#111;border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:20px;overflow-x:auto;max-height:640px;overflow-y:auto}
+.mail-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin-bottom:var(--cds-gap-md)}
+.mail-subj{font-size:var(--cds-font-size-body);margin:0 0 var(--cds-gap-md)}
 .rg-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--cds-gap-md);align-items:flex-start;margin-bottom:var(--cds-gap-sm)}
 .rg-seg{display:inline-flex;border:1px solid var(--color-border-line);border-radius:var(--cds-radius);overflow:hidden}
 .rg-seg button{font:inherit;font-size:var(--cds-font-size-caption);background:transparent;color:var(--color-fg-muted);border:0;padding:6px 12px;cursor:pointer}
@@ -94,6 +108,7 @@ padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-
     <h1>Registrate y Gana en tiendas</h1>
     <p class="rg-take" id="rg-take">&nbsp;</p>
     <p class="rg-take" id="rg-upd" style="font-size:12px;opacity:.8;margin-top:4px"></p>
+    <p class="rg-take" style="margin-top:10px"><a href="#c-qr" style="color:#fff;font-weight:600">Descargar el QR de tu tienda ↓</a> &nbsp;·&nbsp; <a href="#c-mail" style="color:#fff;font-weight:600">Resumen para correo ↓</a></p>
   </header>
 
   <div class="rg-filters" id="rg-filters">
@@ -198,10 +213,46 @@ padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-
     </div>
   </section>
 
+  <section class="rg-card" id="c-mail">
+    <div class="rg-head">
+      <div><h2>Resumen para correo</h2><p class="rg-note" style="margin:2px 0 0">Resumen listo para pegar en Outlook: el acumulado del mes hasta el día elegido, o solo ese día. Copia el asunto y el cuerpo, y envíalo a las tiendas.</p></div>
+      <div style="display:flex;gap:var(--cds-gap-md);flex-wrap:wrap">
+        <div class="rg-f"><label for="f-mail-modo">Tipo de resumen</label><select id="f-mail-modo"><option value="acu">Acumulado del mes</option><option value="dia">Solo el día</option></select></div>
+        <div class="rg-f"><label for="f-mail" id="f-mail-l">Hasta el día</label><select id="f-mail"></select></div>
+      </div>
+    </div>
+    <p class="mail-subj"><strong>Asunto:</strong> <span id="mail-subj"></span></p>
+    <div class="mail-bar">
+      <button type="button" class="rg-btn sec" id="mail-cs">Copiar asunto</button>
+      <button type="button" class="rg-btn" id="mail-cb">Copiar cuerpo del correo</button>
+      <span class="rg-note" id="mail-ok" style="margin:0"></span>
+    </div>
+    <div class="mail-prev" id="mail-prev"></div>
+  </section>
+
+  <section class="rg-card" id="c-qr">
+    <div class="rg-head">
+      <div><h2>QR de tu tienda</h2><p class="rg-note" style="margin:2px 0 0">Elige tu tienda y descarga la pieza con su QR y los premios, lista para imprimir o compartir.</p></div>
+      <div class="rg-f"><label for="f-qr">Tienda</label><select id="f-qr"><option value="">Cargando tiendas…</option></select></div>
+    </div>
+    <div class="qr-wrap">
+      <canvas id="qr-canvas" width="1240" height="1754" aria-label="Vista previa de la pieza con el QR"></canvas>
+      <div class="qr-side">
+        <p style="margin:0" id="qr-info">Elige una tienda para ver su pieza.</p>
+        <div class="qr-acts">
+          <button type="button" class="rg-btn" id="qr-dl" disabled>Descargar pieza (PNG)</button>
+          <button type="button" class="rg-btn sec" id="qr-dl2" disabled>Descargar solo el QR</button>
+        </div>
+        <p class="rg-note" style="margin:0">La pieza tiene tamaño A4. Cada QR lleva el código de la tienda, así los registros se cuentan para ella en este dashboard. Antes de imprimir, prueba escanearlo con tu celular.</p>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>
 const STORE = {};
 const CALCS = [];
@@ -986,6 +1037,368 @@ $('#lg-a').style.background = dash.colors[0];
 $('#lg-b').style.background = 'var(--cds-chart-muted)';
 $('#lg-c').style.background = dash.colors[0];
 
+// ---------- Resumen para correo ----------
+const DIAS_L = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const hoyLima = () => new Date().toLocaleDateString('en-CA', {timeZone: 'America/Lima'});
+const sumarDias = (iso, n) => new Date(Date.UTC(+iso.slice(0, 4), +iso.slice(5, 7) - 1, +iso.slice(8) + n)).toISOString().slice(0, 10);
+const fechaLarga = (iso) => { const d = new Date(iso + 'T12:00:00Z'); return DIAS_L[d.getUTCDay()] + ' ' + d.getUTCDate() + ' de ' + MESES_L[d.getUTCMonth()]; };
+const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+const pct = (a, b) => b > 0 ? pc(a / b) : '—';
+const MAIL = {dia: '', modo: 'acu'};
+
+function calcResumen(iso) {
+  const mes = iso.slice(0, 7), dN = +iso.slice(8);
+  const dias = new Date(Date.UTC(+mes.slice(0, 4), +mes.slice(5), 0)).getUTCDate();
+  const T = {};
+  for (const t of dash.data('tiendas').data) T[t.cod] = t;
+  const meta = {};
+  for (const m of dash.data('metas').data) if (m.mes === mes && T[m.cod] && T[m.cod].status === 'Activo' && Number(m.meta) > 0) meta[m.cod] = Number(m.meta);
+  const dia = {}, acu = {}, prev = sumarDias(iso, -7);
+  let vPrev = 0;
+  for (const r of dash.data('registros_dia').data) {
+    if (r.day === prev) vPrev += r.regs;
+    if (r.mes !== mes || r.day > iso) continue;
+    acu[r.cod] = (acu[r.cod] || 0) + r.regs;
+    if (r.day === iso) dia[r.cod] = (dia[r.cod] || 0) + r.regs;
+  }
+  const sum = (o) => Object.values(o).reduce((a, b) => a + b, 0);
+  const metaMes = sum(meta), metaDia = metaMes / dias, nMeta = Object.keys(meta).length;
+  const R = {iso, mes, dN, dias, metaMes, metaDia, nMeta, esperado: metaDia * dN, vDia: sum(dia), vAcu: sum(acu), vPrev,
+    conReg: Object.values(dia).filter((v) => v > 0).length,
+    enMeta: Object.keys(meta).filter((c) => (dia[c] || 0) >= meta[c] / dias).length,
+    ceroMes: Object.keys(meta).filter((c) => !acu[c]).length};
+  const Z = {};
+  for (const c of new Set([...Object.keys(meta), ...Object.keys(acu)])) {
+    const t = T[c]; if (!t) continue;
+    const z = Z[t.zonal] || (Z[t.zonal] = {zonal: t.zonal, zona: t.zona, dia: 0, acu: 0, metaDia: 0, tiendas: 0});
+    z.dia += dia[c] || 0; z.acu += acu[c] || 0;
+    if (meta[c]) { z.metaDia += meta[c] / dias; z.tiendas++; }
+  }
+  R.zonales = Object.values(Z).filter((z) => z.tiendas > 0).map((z) => Object.assign(z, {esp: z.metaDia * dN}))
+    .sort((a, b) => (b.acu / (b.esp || 1)) - (a.acu / (a.esp || 1)));
+  const st = {ok: 0, warn: 0, bad: 0};
+  R.tiendasAcu = Object.keys(meta).map((c) => {
+    const esp = meta[c] / dias * dN, rr = (acu[c] || 0) / esp;
+    st[rr >= 1 ? 'ok' : rr >= 0.7 ? 'warn' : 'bad']++;
+    return {cod: c, nombre: T[c].nombre, zonal: T[c].zonal, v: acu[c] || 0, esp, rr};
+  });
+  R.st = st;
+  R.topAcu = Object.keys(acu).filter((c) => T[c] && acu[c] > 0).map((c) => ({cod: c, nombre: T[c].nombre, zonal: T[c].zonal, v: acu[c],
+    esp: meta[c] ? meta[c] / dias * dN : 0})).sort((a, b) => b.v - a.v).slice(0, 10);
+  R.proy = dN ? R.vAcu / dN * dias : 0;
+  R.top = Object.keys(dia).filter((c) => T[c] && dia[c] > 0).map((c) => ({cod: c, nombre: T[c].nombre, zonal: T[c].zonal, v: dia[c], md: meta[c] ? meta[c] / dias : 0}))
+    .sort((a, b) => b.v - a.v).slice(0, 5);
+  return R;
+}
+
+function htmlResumen(R) {
+  const url = location.origin + location.pathname;
+  const th = 'style="text-align:left;padding:6px 10px;background:#E4002B;color:#fff;font-size:13px"';
+  const thr = 'style="text-align:right;padding:6px 10px;background:#E4002B;color:#fff;font-size:13px"';
+  const td = 'style="padding:6px 10px;border-bottom:1px solid #e5e5e5;font-size:13px;text-align:left"';
+  const tdr = 'style="padding:6px 10px;border-bottom:1px solid #e5e5e5;font-size:13px;text-align:right"';
+  const kpi = (t, v, n) => '<td style="padding:12px 16px;background:#f4f4f4;border-left:4px solid #E4002B;vertical-align:top;text-align:left;min-width:150px"><div style="font-size:12px;color:#555">' + t +
+    '</div><div style="font-size:24px;font-weight:bold;margin:2px 0">' + v + '</div><div style="font-size:12px;color:#555">' + n + '</div></td>';
+  const vs = R.vPrev > 0 ? ((R.vDia >= R.vPrev ? '+' : '−') + pc(Math.abs(R.vDia / R.vPrev - 1)) + ' vs. el mismo día de la semana anterior') : '';
+  const porTienda = R.nMeta ? Math.round(R.metaDia / R.nMeta) : 0;
+  let h = '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#111;line-height:1.45">';
+  h += '<p>Hola equipo,</p><p>Este es el resumen de <b>Regístrate y Gana</b> del <b>' + fechaLarga(R.iso) + '</b>:</p>';
+  h += '<table cellpadding="0" cellspacing="8" style="border-collapse:separate"><tr>' +
+    kpi('Registros del día', fmt(R.vDia), R.metaMes ? pct(R.vDia, R.metaDia) + ' de la meta del día (' + fmt(Math.round(R.metaDia)) + ')' : 'en ' + R.conReg + ' tiendas') +
+    kpi('Acumulado de ' + MESES_L[+R.mes.slice(5) - 1], fmt(R.vAcu), R.metaMes ? pct(R.vAcu, R.metaMes) + ' de la meta del mes (' + fmt(Math.round(R.metaMes)) + ')' : '') +
+    (R.metaMes ? kpi('Ritmo a la fecha', pct(R.vAcu, R.esperado), 'esperado al día ' + R.dN + ': ' + fmt(Math.round(R.esperado))) : '') + '</tr></table>';
+  h += '<ul style="padding-left:20px;margin:8px 0">';
+  h += '<li>' + R.conReg + ' tiendas registraron clientes ese día' + (vs ? ' (' + vs + ').' : '.') + '</li>';
+  if (R.metaMes) h += '<li>' + R.enMeta + ' de ' + R.nMeta + ' tiendas llegaron a su meta del día.</li>';
+  if (R.metaMes && R.ceroMes) h += '<li><b>' + R.ceroMes + ' tiendas todavía no registran a nadie en el mes.</b> ¡Activemos el QR en caja!</li>';
+  h += '</ul>';
+  if (R.zonales.length && R.metaMes) {
+    h += '<p style="margin:16px 0 6px"><b>Avance por zonal</b> (acumulado del mes contra lo esperado a la fecha)</p>';
+    h += '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;min-width:520px"><tr><th ' + th + '>Zonal</th><th ' + th + '>Zona</th><th ' + thr + '>Del día</th><th ' + thr + '>Acumulado</th><th ' + thr + '>Ritmo</th></tr>';
+    for (const z of R.zonales) {
+      const rr = z.esp ? z.acu / z.esp : 0, col = rr >= 1 ? '#17824f' : rr >= 0.7 ? '#b25e00' : '#e4002b';
+      h += '<tr><td ' + td + '>' + esc(z.zonal) + '</td><td ' + td + '>' + esc(z.zona) + '</td><td ' + tdr + '>' + fmt(z.dia) + '</td><td ' + tdr + '>' + fmt(z.acu) +
+        '</td><td style="padding:6px 10px;border-bottom:1px solid #e5e5e5;font-size:13px;text-align:right;font-weight:bold;color:' + col + '">' + pct(z.acu, z.esp) + '</td></tr>';
+    }
+    h += '</table>';
+  }
+  if (R.top.length) {
+    h += '<p style="margin:16px 0 6px"><b>Top ' + R.top.length + ' tiendas del día</b> 👏</p>';
+    h += '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;min-width:520px"><tr><th ' + th + '>Tienda</th><th ' + th + '>Zonal</th><th ' + thr + '>Registros</th>' + (R.metaMes ? '<th ' + thr + '>De su meta del día</th>' : '') + '</tr>';
+    for (const t of R.top) h += '<tr><td ' + td + '>' + esc(t.nombre) + ' (' + t.cod + ')</td><td ' + td + '>' + esc(t.zonal) + '</td><td ' + tdr + '>' + fmt(t.v) + '</td>' + (R.metaMes ? '<td ' + tdr + '>' + pct(t.v, t.md) + '</td>' : '') + '</tr>';
+    h += '</table>';
+  }
+  if (porTienda) h += '<p style="margin-top:16px">Recuerden: la meta equivale a unos <b>' + porTienda + ' registros por tienda al día</b>. Cada cliente cuenta.</p>';
+  h += '<p>Revisen el avance de su tienda y descarguen su QR aquí: <a href="' + url + '" style="color:#E4002B">' + url + '</a></p><p>Saludos,</p></div>';
+  return h;
+}
+
+function htmlAcumulado(R) {
+  const url = location.origin + location.pathname, mesL = MESES_L[+R.mes.slice(5) - 1];
+  const th = 'style="text-align:left;padding:6px 10px;background:#E4002B;color:#fff;font-size:13px"';
+  const thr = 'style="text-align:right;padding:6px 10px;background:#E4002B;color:#fff;font-size:13px"';
+  const td = 'style="padding:6px 10px;border-bottom:1px solid #e5e5e5;font-size:13px;text-align:left"';
+  const tdr = 'style="padding:6px 10px;border-bottom:1px solid #e5e5e5;font-size:13px;text-align:right"';
+  const col = (rr) => rr >= 1 ? '#17824f' : rr >= 0.7 ? '#b25e00' : '#e4002b';
+  const tdc = (rr, t) => '<td style="padding:6px 10px;border-bottom:1px solid #e5e5e5;font-size:13px;text-align:right;font-weight:bold;color:' + col(rr) + '">' + t + '</td>';
+  const kpi = (t, v, n) => '<td style="padding:12px 16px;background:#f4f4f4;border-left:4px solid #E4002B;vertical-align:top;text-align:left;min-width:150px"><div style="font-size:12px;color:#555">' + t +
+    '</div><div style="font-size:24px;font-weight:bold;margin:2px 0">' + v + '</div><div style="font-size:12px;color:#555">' + n + '</div></td>';
+  const HMm = R.metaMes > 0;
+  let h = '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#111;line-height:1.45">';
+  h += '<p>Hola equipo,</p><p>Así vamos en <b>Regístrate y Gana</b> en los primeros <b>' + R.dN + ' días de ' + mesL + '</b> (del 1 al ' + R.dN + ' de ' + mesL + '):</p>';
+  h += '<table cellpadding="0" cellspacing="8" style="border-collapse:separate"><tr>' +
+    kpi('Registros acumulados', fmt(R.vAcu), HMm ? pct(R.vAcu, R.metaMes) + ' de la meta del mes (' + fmt(Math.round(R.metaMes)) + ')' : 'del 1 al ' + R.dN + ' de ' + mesL) +
+    (HMm ? kpi('Ritmo a la fecha', pct(R.vAcu, R.esperado), 'esperado al día ' + R.dN + ': ' + fmt(Math.round(R.esperado))) : '') +
+    kpi('Promedio por día', fmt(Math.round(R.vAcu / (R.dN || 1))), HMm ? 'meta diaria: ' + fmt(Math.round(R.metaDia)) : '') +
+    (HMm ? kpi('Proyección al cierre', fmt(Math.round(R.proy)), pct(R.proy, R.metaMes) + ' de la meta si seguimos así') : '') + '</tr></table>';
+  if (HMm) {
+    h += '<ul style="padding-left:20px;margin:8px 0">';
+    h += '<li><b style="color:#17824f">' + R.st.ok + (R.st.ok === 1 ? ' tienda</b> va' : ' tiendas</b> van') + ' al ritmo de su meta, <b style="color:#b25e00">' + R.st.warn + '</b> están en riesgo (70% a 99%) y <b style="color:#e4002b">' + R.st.bad + '</b> están rezagadas (menos del 70%).</li>';
+    if (R.ceroMes) h += '<li><b>' + R.ceroMes + ' tiendas todavía no registran a nadie en el mes.</b> ¡Activemos el QR en caja!</li>';
+    const falta = Math.max(0, R.metaMes - R.vAcu), quedan = R.dias - R.dN;
+    if (quedan > 0 && falta > 0) h += '<li>Para llegar a la meta faltan <b>' + fmt(Math.round(falta)) + ' registros</b> en ' + quedan + ' días: unos <b>' + fmt(Math.round(falta / quedan)) + ' por día</b>.</li>';
+    h += '</ul>';
+  }
+  if (R.zonales.length && HMm) {
+    h += '<p style="margin:16px 0 6px"><b>Avance por zonal</b> (del 1 al ' + R.dN + ' de ' + mesL + ')</p>';
+    h += '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;min-width:560px"><tr><th ' + th + '>Zonal</th><th ' + th + '>Zona</th><th ' + thr + '>Acumulado</th><th ' + thr + '>Esperado</th><th ' + thr + '>Ritmo</th><th ' + thr + '>Avance meta mes</th></tr>';
+    for (const z of R.zonales) {
+      const rr = z.esp ? z.acu / z.esp : 0;
+      h += '<tr><td ' + td + '>' + esc(z.zonal) + '</td><td ' + td + '>' + esc(z.zona) + '</td><td ' + tdr + '>' + fmt(z.acu) + '</td><td ' + tdr + '>' + fmt(Math.round(z.esp)) + '</td>' +
+        tdc(rr, pct(z.acu, z.esp)) + '<td ' + tdr + '>' + pct(z.acu, z.metaDia * R.dias) + '</td></tr>';
+    }
+    h += '</table>';
+  }
+  if (R.topAcu.length) {
+    h += '<p style="margin:16px 0 6px"><b>Top ' + R.topAcu.length + ' tiendas del mes</b> 👏</p>';
+    h += '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;min-width:560px"><tr><th ' + th + '>#</th><th ' + th + '>Tienda</th><th ' + th + '>Zonal</th><th ' + thr + '>Acumulado</th>' + (HMm ? '<th ' + thr + '>Ritmo</th>' : '') + '</tr>';
+    R.topAcu.forEach((t, i) => {
+      h += '<tr><td ' + td + '>' + (i + 1) + '</td><td ' + td + '>' + esc(t.nombre) + ' (' + t.cod + ')</td><td ' + td + '>' + esc(t.zonal) + '</td><td ' + tdr + '>' + fmt(t.v) + '</td>' +
+        (HMm ? (t.esp ? tdc(t.v / t.esp, pct(t.v, t.esp)) : '<td ' + tdr + '>—</td>') : '') + '</tr>';
+    });
+    h += '</table>';
+  }
+  const porTienda = R.nMeta ? Math.round(R.metaDia / R.nMeta) : 0;
+  if (porTienda) h += '<p style="margin-top:16px">Recuerden: la meta equivale a unos <b>' + porTienda + ' registros por tienda al día</b>. Cada cliente cuenta.</p>';
+  h += '<p>Revisen el avance de su tienda y descarguen su QR aquí: <a href="' + url + '" style="color:#E4002B">' + url + '</a></p><p>Saludos,</p></div>';
+  return h;
+}
+
+function textoAcumulado(R) {
+  const mesL = MESES_L[+R.mes.slice(5) - 1];
+  const L = ['Hola equipo,', '', 'Así vamos en Regístrate y Gana del 1 al ' + R.dN + ' de ' + mesL + ':', '',
+    '- Registros acumulados: ' + fmt(R.vAcu) + (R.metaMes ? ' (' + pct(R.vAcu, R.metaMes) + ' de la meta del mes; ritmo ' + pct(R.vAcu, R.esperado) + ')' : ''),
+    '- Promedio por día: ' + fmt(Math.round(R.vAcu / (R.dN || 1))) + (R.metaMes ? ' (meta diaria ' + fmt(Math.round(R.metaDia)) + ')' : '')];
+  if (R.metaMes) L.push('- ' + R.st.ok + (R.st.ok === 1 ? ' tienda' : ' tiendas') + ' al ritmo, ' + R.st.warn + ' en riesgo y ' + R.st.bad + ' rezagadas.');
+  if (R.topAcu.length) { L.push('', 'Top tiendas del mes:'); R.topAcu.forEach((t, i) => L.push((i + 1) + '. ' + t.nombre + ' (' + t.cod + '): ' + fmt(t.v))); }
+  L.push('', 'Dashboard: ' + location.origin + location.pathname, '', 'Saludos,');
+  return L.join('\n');
+}
+
+function textoResumen(R) {
+  const L = ['Hola equipo,', '', 'Resumen de Regístrate y Gana del ' + fechaLarga(R.iso) + ':', '',
+    '- Registros del día: ' + fmt(R.vDia) + (R.metaMes ? ' (' + pct(R.vDia, R.metaDia) + ' de la meta del día)' : ''),
+    '- Acumulado del mes: ' + fmt(R.vAcu) + (R.metaMes ? ' (' + pct(R.vAcu, R.metaMes) + ' de la meta; ritmo ' + pct(R.vAcu, R.esperado) + ')' : ''),
+    '- ' + R.conReg + ' tiendas registraron clientes' + (R.metaMes ? '; ' + R.enMeta + ' llegaron a su meta del día' : '') + '.'];
+  if (R.top.length) { L.push('', 'Top tiendas del día:'); R.top.forEach((t, i) => L.push((i + 1) + '. ' + t.nombre + ' (' + t.cod + '): ' + fmt(t.v))); }
+  L.push('', 'Dashboard: ' + location.origin + location.pathname, '', 'Saludos,');
+  return L.join('\n');
+}
+
+function mostrarResumen() {
+  if (!MAIL.dia) return;
+  const R = calcResumen(MAIL.dia);
+  MAIL.R = R;
+  const acu = MAIL.modo === 'acu';
+  $('#f-mail-l').textContent = acu ? 'Hasta el día' : 'Día del resumen';
+  $('#mail-subj').textContent = acu ? 'Regístrate y Gana | Así vamos del 1 al ' + R.dN + ' de ' + MESES_L[+R.mes.slice(5) - 1]
+    : 'Regístrate y Gana | Resumen del ' + fechaLarga(R.iso);
+  $('#mail-prev').innerHTML = acu ? htmlAcumulado(R) : htmlResumen(R);
+}
+
+function initMail() {
+  const hoy = hoyLima(), sel = $('#f-mail');
+  if (!sel.options.length) {
+    for (let i = 1; i <= 14; i++) {
+      const d = sumarDias(hoy, -i);
+      const o = document.createElement('option'); o.value = d; o.textContent = (i === 1 ? 'Ayer · ' : '') + fechaLarga(d); sel.append(o);
+    }
+    const o0 = document.createElement('option'); o0.value = hoy; o0.textContent = 'Hoy (parcial) · ' + fechaLarga(hoy); sel.prepend(o0);
+    MAIL.dia = sumarDias(hoy, -1); sel.value = MAIL.dia;
+  }
+  mostrarResumen();
+}
+
+async function copiar(html, txt) {
+  try {
+    if (html && window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+      await navigator.clipboard.write([new ClipboardItem({'text/html': new Blob([html], {type: 'text/html'}), 'text/plain': new Blob([txt], {type: 'text/plain'})})]);
+      return true;
+    }
+    if (!html && navigator.clipboard && navigator.clipboard.writeText) { await navigator.clipboard.writeText(txt); return true; }
+  } catch (e) { /* respaldo abajo */ }
+  try {
+    const n = html ? $('#mail-prev') : Object.assign(document.createElement('textarea'), {value: txt});
+    if (!html) document.body.appendChild(n);
+    const rg = document.createRange(); rg.selectNodeContents(n);
+    const se = getSelection(); se.removeAllRanges();
+    if (html) se.addRange(rg); else n.select();
+    const ok = document.execCommand('copy'); se.removeAllRanges();
+    if (!html) n.remove();
+    return ok;
+  } catch (e) { return false; }
+}
+function avisar(ok) {
+  $('#mail-ok').textContent = ok ? '¡Copiado! Pégalo en Outlook con Ctrl + V.' : 'No se pudo copiar. Selecciona el texto de abajo y cópialo con Ctrl + C.';
+  clearTimeout(MAIL.t); MAIL.t = setTimeout(() => { $('#mail-ok').textContent = ''; }, 5000);
+}
+$('#f-mail').addEventListener('change', (e) => { MAIL.dia = e.target.value; mostrarResumen(); });
+$('#mail-cs').addEventListener('click', async () => avisar(await copiar('', $('#mail-subj').textContent)));
+$('#mail-cb').addEventListener('click', async () => {
+  if (!MAIL.R) return;
+  const acu = MAIL.modo === 'acu';
+  avisar(await copiar(acu ? htmlAcumulado(MAIL.R) : htmlResumen(MAIL.R), acu ? textoAcumulado(MAIL.R) : textoResumen(MAIL.R)));
+});
+$('#f-mail-modo').addEventListener('change', (e) => { MAIL.modo = e.target.value; mostrarResumen(); });
+
+// ---------- QR de tienda ----------
+const QR_BASE = 'https://www.coolbox.pe/registrate-actualiza-y-gana?origin=';
+const QR = {cod: '', premios: null, listo: false};
+const ROJO = '#E4002B';
+
+function qrMatriz(texto) {
+  const q = qrcode(0, 'M'); q.addData(texto); q.make();
+  return q;
+}
+function dibujarQR(ctx, texto, x, y, tam) {
+  const q = qrMatriz(texto), n = q.getModuleCount(), quiet = 4;
+  const m = tam / (n + quiet * 2);
+  ctx.fillStyle = '#fff'; ctx.fillRect(x, y, tam, tam);
+  ctx.fillStyle = '#000';
+  for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+    if (q.isDark(r, c)) ctx.fillRect(Math.floor(x + (c + quiet) * m), Math.floor(y + (r + quiet) * m), Math.ceil(m), Math.ceil(m));
+  }
+}
+function lineas(ctx, texto, ancho) {
+  const out = []; let l = '';
+  for (const w of String(texto).split(/\s+/)) {
+    const t = l ? l + ' ' + w : w;
+    if (ctx.measureText(t).width > ancho && l) { out.push(l); l = w; } else l = t;
+  }
+  if (l) out.push(l);
+  return out;
+}
+function rrect(ctx, x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+const FONT = '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+
+function dibujarPieza(t) {
+  const cv = $('#qr-canvas'), ctx = cv.getContext('2d'), W = cv.width, H = cv.height, P = 90;
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  // Cabecera roja
+  ctx.fillStyle = ROJO; ctx.fillRect(0, 0, W, 470);
+  ctx.fillStyle = '#fff'; ctx.textBaseline = 'alphabetic';
+  ctx.font = '800 46px ' + FONT; ctx.fillText('COOLBOX', P, 120);
+  ctx.font = '800 112px ' + FONT; ctx.fillText('Regístrate', P, 250);
+  ctx.fillText('y gana', P, 360);
+  ctx.font = '500 38px ' + FONT;
+  ctx.fillText('Escanea el código y participa', P, 432);
+  // QR con marco (más chico si hay muchos premios)
+  const pr = (QR.premios || []).filter((p) => p.premio).slice(0, 6);
+  const tam = pr.length > 4 ? 460 : pr.length ? 540 : 700, qx = (W - tam) / 2, qy = 540;
+  ctx.fillStyle = ROJO; rrect(ctx, qx - 18, qy - 18, tam + 36, tam + 36, 28); ctx.fill();
+  dibujarQR(ctx, QR_BASE + t.cod, qx, qy, tam);
+  ctx.fillStyle = '#111'; ctx.textAlign = 'center';
+  ctx.font = '600 34px ' + FONT; ctx.fillText('Apunta la cámara de tu celular aquí', W / 2, qy + tam + 76);
+  // Premios
+  let y = qy + tam + 156;
+  if (pr.length) {
+    ctx.font = '800 50px ' + FONT; ctx.fillStyle = '#111'; ctx.fillText('Puedes ganar', W / 2, y);
+    y += 40;
+    const cols = pr.length === 1 ? 1 : 2, gap = 30, cw = (W - P * 2 - gap * (cols - 1)) / cols;
+    const filas = Math.ceil(pr.length / cols), disp = H - 170 - y - 50;
+    const ch = Math.min(150, (disp - gap * (filas - 1)) / filas);
+    pr.forEach((p, i) => {
+      const cx = P + (i % cols) * (cw + gap), cy = y + Math.floor(i / cols) * (ch + gap);
+      ctx.fillStyle = '#F4F4F4'; rrect(ctx, cx, cy, cw, ch, 22); ctx.fill();
+      ctx.fillStyle = ROJO; rrect(ctx, cx, cy, 14, ch, 7); ctx.fill();
+      ctx.textAlign = 'left'; ctx.fillStyle = '#111';
+      const fs = ch >= 120 ? 36 : 30, fd = ch >= 120 ? 26 : 22;
+      ctx.font = '700 ' + fs + 'px ' + FONT;
+      const l1 = lineas(ctx, p.premio, cw - 66).slice(0, 2);
+      const conDet = p.detalle && l1.length < 2;
+      const alto = l1.length * fs * 1.2 + (conDet ? fd * 1.5 : 0);
+      let ty = cy + (ch - alto) / 2 + fs;
+      l1.forEach((l) => { ctx.fillText(l, cx + 40, ty); ty += fs * 1.2; });
+      if (conDet) {
+        ctx.font = '400 ' + fd + 'px ' + FONT; ctx.fillStyle = '#555';
+        ctx.fillText(lineas(ctx, p.detalle, cw - 66)[0], cx + 40, ty + fd * 0.3);
+      }
+    });
+    ctx.textAlign = 'center';
+  }
+  // Pie
+  ctx.fillStyle = '#0b0b0c'; ctx.fillRect(0, H - 170, W, 170);
+  ctx.fillStyle = ROJO; ctx.fillRect(0, H - 170, W, 10);
+  ctx.textAlign = 'left'; ctx.fillStyle = '#fff';
+  ctx.font = '700 40px ' + FONT;
+  const nom = lineas(ctx, 'Tienda ' + t.nombre, W - P * 2 - 260)[0];
+  ctx.fillText(nom, P, H - 92);
+  ctx.font = '400 28px ' + FONT; ctx.fillStyle = '#bbb';
+  ctx.fillText('Código ' + t.cod, P, H - 48);
+  ctx.textAlign = 'right'; ctx.fillStyle = '#fff'; ctx.font = '700 36px ' + FONT;
+  ctx.fillText('coolbox.pe', W - P, H - 72);
+  ctx.textAlign = 'left';
+}
+
+function descargar(canvas, nombre) {
+  canvas.toBlob((b) => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b); a.download = nombre;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  }, 'image/png');
+}
+
+function mostrarQR() {
+  const t = dash.data('tiendas').data.find((x) => x.cod === QR.cod);
+  $('#qr-dl').disabled = $('#qr-dl2').disabled = !t;
+  if (!t) return;
+  dibujarPieza(t);
+  const url = QR_BASE + t.cod;
+  $('#qr-info').innerHTML = '';
+  const b = document.createElement('strong'); b.textContent = t.cod + ' · ' + t.nombre;
+  const br = document.createElement('br');
+  const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = url;
+  $('#qr-info').append(b, br, a);
+}
+
+async function initQR() {
+  if (QR.listo) return;
+  QR.listo = true;
+  try {
+    const txt = await fetch('data/premios.csv?t=' + Date.now(), {cache: 'no-store'}).then((r) => r.ok ? r.text() : '');
+    QR.premios = txt.trim() ? d3.csvParse(txt.trim()) : [];
+  } catch (e) { QR.premios = []; }
+  const ts = dash.data('tiendas').data.filter((t) => t.status === 'Activo').sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+  const sel = $('#f-qr'); sel.innerHTML = '';
+  const o0 = document.createElement('option'); o0.value = ''; o0.textContent = 'Elige tu tienda'; sel.append(o0);
+  for (const t of ts) { const o = document.createElement('option'); o.value = t.cod; o.textContent = t.nombre + ' (' + t.cod + ')'; sel.append(o); }
+  const pre = (location.hash.match(/^#qr-([A-Za-z0-9]{3})$/) || [])[1];
+  if (pre && ts.some((t) => t.cod === pre.toUpperCase())) { QR.cod = pre.toUpperCase(); sel.value = QR.cod; }
+  mostrarQR();
+}
+$('#f-qr').addEventListener('change', (e) => { QR.cod = e.target.value; mostrarQR(); });
+$('#qr-dl').addEventListener('click', () => { if (QR.cod) descargar($('#qr-canvas'), 'registrate-y-gana-' + QR.cod + '.png'); });
+$('#qr-dl2').addEventListener('click', () => {
+  if (!QR.cod) return;
+  const c = document.createElement('canvas'); c.width = c.height = 1000;
+  dibujarQR(c.getContext('2d'), QR_BASE + QR.cod, 0, 0, 1000);
+  descargar(c, 'qr-' + QR.cod + '.png');
+});
+
 async function cargar() {
   const q = '?t=' + Date.now();
   const res = await Promise.all(FUENTES.map((id) => fetch('data/' + id + '.csv' + q, {cache: 'no-store'}).then((r) => { if (!r.ok) throw new Error(id); return r.text(); })));
@@ -999,6 +1412,8 @@ async function cargar() {
 }
 cargar().then(() => {
   dash.onData(render);
-  setInterval(() => { cargar().then(render).catch(() => {}); }, 120000);
+  dash.onData(initMail);
+  initQR();
+  setInterval(() => { cargar().then(() => { render(); mostrarResumen(); }).catch(() => {}); }, 120000);
 }).catch(() => { $('#rg-take').textContent = 'No se pudieron cargar los datos. Intenta recargar la página en unos minutos.'; });
 </script>
