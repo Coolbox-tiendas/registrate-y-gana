@@ -672,7 +672,8 @@ function drawGroups(list) {
   const g = new Map();
   for (const r of list) { const k = r[key] || 'Sin dato'; if (!g.has(k)) g.set(k, []); g.get(k).push(r); }
   const rows = [...g.entries()].map(([k, l]) => ({k, a: agg(l), otro: key === 'zona' ? [...new Set(l.map((x) => x.zonal))].join(', ') : [...new Set(l.map((x) => x.zona))].join(', ')}));
-  rows.sort((p, q) => HM ? (p.a.ritmo ?? 9) - (q.a.ritmo ?? 9) : q.a.v - p.a.v);
+  // De mayor a menor avance sobre la meta (o registros, si no hay meta)
+  rows.sort((p, q) => HM ? ((q.a.cumpl ?? -1) - (p.a.cumpl ?? -1)) || (q.a.v - p.a.v) : q.a.v - p.a.v);
   $('#g-note').textContent = S.dia ? (HM ? 'Registros y avance sobre la meta del día ' + S.dia + ' por grupo.' : 'Registros del día ' + S.dia + ' por grupo.') : HM ? 'Registros y avance sobre la meta del mes por grupo.' : 'Registros por grupo. La meta solo existe para el mes en curso.';
   const tbl = $('#t-grupo');
   tbl.replaceChildren();
