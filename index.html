@@ -55,10 +55,19 @@ padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-
 .qr-side a{color:inherit;word-break:break-all}
 .qr-acts{display:flex;gap:8px;flex-wrap:wrap}
 .qr-link{display:inline-block;margin-top:6px;font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
-.mail-prev td,.mail-prev th{font-variant-numeric:tabular-nums}
-.mail-prev{background:#fff;color:#111;border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:20px;overflow-x:auto;max-height:640px;overflow-y:auto}
-.mail-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin-bottom:var(--cds-gap-md)}
-.mail-subj{font-size:var(--cds-font-size-body);margin:0 0 var(--cds-gap-md)}
+#t-dxd{font-size:var(--cds-font-size-caption)}
+#t-dxd th,#t-dxd td{padding:6px 7px;text-align:right;white-space:nowrap}
+#t-dxd th:first-child,#t-dxd td:first-child{position:sticky;left:0;z-index:1;background:var(--color-panel);text-align:left;min-width:190px;max-width:240px;overflow:hidden;text-overflow:ellipsis}
+#t-dxd thead th{position:sticky;top:0;z-index:2;background:var(--color-panel)}
+#t-dxd thead th:first-child{z-index:3}
+#t-dxd .wd{display:block;font-weight:400;color:var(--color-fg-muted);font-size:10px}
+#t-dxd tr.tot td{font-weight:700;border-bottom:2px solid var(--color-border-line)}
+#t-dxd td.sep,#t-dxd th.sep{border-left:2px solid var(--color-border-line)}
+#t-dxd .k-ok{color:var(--color-ok);font-weight:700}
+#t-dxd .k-warn{color:var(--color-warn);font-weight:700}
+#t-dxd .k-bad{color:var(--color-bad)}
+#t-dxd .k-0{color:var(--color-fg-muted);opacity:.6}
+.rg-acts{display:flex;gap:var(--cds-gap-md);align-items:end;flex-wrap:wrap}
 .rg-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--cds-gap-md);align-items:flex-start;margin-bottom:var(--cds-gap-sm)}
 .rg-seg{display:inline-flex;border:1px solid var(--color-border-line);border-radius:var(--cds-radius);overflow:hidden}
 .rg-seg button{font:inherit;font-size:var(--cds-font-size-caption);background:transparent;color:var(--color-fg-muted);border:0;padding:6px 12px;cursor:pointer}
@@ -108,7 +117,7 @@ padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-
     <h1>Registrate y Gana en tiendas</h1>
     <p class="rg-take" id="rg-take">&nbsp;</p>
     <p class="rg-take" id="rg-upd" style="font-size:12px;opacity:.8;margin-top:4px"></p>
-    <p class="rg-take" style="margin-top:10px"><a href="#c-qr" style="color:#fff;font-weight:600">Descargar el QR de tu tienda ↓</a> &nbsp;·&nbsp; <a href="#c-mail" style="color:#fff;font-weight:600">Resumen para correo ↓</a></p>
+    <p class="rg-take" style="margin-top:10px"><a href="#c-qr" style="color:#fff;font-weight:600">Descargar el QR de tu tienda ↓</a></p>
   </header>
 
   <div class="rg-filters" id="rg-filters">
@@ -157,7 +166,10 @@ padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-
   <section class="rg-card" id="c-tiendas">
     <div class="rg-head">
       <div><h2>Tiendas</h2><p class="rg-note" style="margin:2px 0 0" id="t-note"></p></div>
-      <div class="rg-f"><label for="f-q">Buscar tienda</label><input type="search" id="f-q" placeholder="Código o nombre"></div>
+      <div class="rg-acts">
+        <button type="button" class="rg-btn" id="t-img" hidden title="Una sola imagen con todas las tiendas del filtro">Descargar imagen</button>
+        <div class="rg-f"><label for="f-q">Buscar tienda</label><input type="search" id="f-q" placeholder="Código o nombre"></div>
+      </div>
     </div>
     <div class="rg-tw"><table id="t-tiendas"></table></div>
     <ul class="rg-leg" id="t-leg-d" hidden>
@@ -172,6 +184,21 @@ padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-
       <li><span class="rg-st st-bad">Rezagada</span> lleva menos del 70% de lo que debería llevar a la fecha; necesita reforzar para llegar a su meta.</li>
       <li><span class="rg-st st-na">Sin meta</span> tienda cerrada, inactiva o sin meta asignada.</li>
     </ul>
+  </section>
+
+  <section class="rg-card" id="c-dxd" hidden>
+    <div class="rg-head">
+      <div><h2>Día a día por tienda</h2><p class="rg-note" style="margin:2px 0 0" id="dx-note"></p></div>
+      <div class="rg-acts">
+        <div class="rg-seg" role="group" aria-label="Ver">
+          <button type="button" id="dx-dia" aria-pressed="true">Por día</button>
+          <button type="button" id="dx-acu" aria-pressed="false">Acumulado</button>
+        </div>
+        <button type="button" class="rg-btn" id="dx-img">Descargar imagen</button>
+      </div>
+    </div>
+    <div class="rg-tw"><table id="t-dxd"></table></div>
+    <p class="rg-note" id="dx-leg" style="margin-top:8px"></p>
   </section>
 
   <section class="rg-card" id="c-anio">
@@ -211,23 +238,6 @@ padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-
       <p class="rg-note" id="mx-ctitle"></p>
       <div class="rg-chart" id="mx-chart"></div>
     </div>
-  </section>
-
-  <section class="rg-card" id="c-mail">
-    <div class="rg-head">
-      <div><h2>Resumen para correo</h2><p class="rg-note" style="margin:2px 0 0">Resumen listo para pegar en Outlook: el acumulado del mes hasta el día elegido, o solo ese día. Copia el asunto y el cuerpo, y envíalo a las tiendas.</p></div>
-      <div style="display:flex;gap:var(--cds-gap-md);flex-wrap:wrap">
-        <div class="rg-f"><label for="f-mail-modo">Tipo de resumen</label><select id="f-mail-modo"><option value="acu">Acumulado del mes</option><option value="dia">Solo el día</option></select></div>
-        <div class="rg-f"><label for="f-mail" id="f-mail-l">Hasta el día</label><select id="f-mail"></select></div>
-      </div>
-    </div>
-    <p class="mail-subj"><strong>Asunto:</strong> <span id="mail-subj"></span></p>
-    <div class="mail-bar">
-      <button type="button" class="rg-btn sec" id="mail-cs">Copiar asunto</button>
-      <button type="button" class="rg-btn" id="mail-cb">Copiar cuerpo del correo</button>
-      <span class="rg-note" id="mail-ok" style="margin:0"></span>
-    </div>
-    <div class="mail-prev" id="mail-prev"></div>
   </section>
 
   <section class="rg-card" id="c-qr">
@@ -694,6 +704,224 @@ function drawGroups(list) {
   tbl.appendChild(tb);
 }
 
+const TT = {rows: [], list: []};
+const DX = {modo: 'dia'};
+const filtroZona = () => !!(S.zona || S.zonal);
+function tituloFiltro() {
+  let zonal = S.zonal;
+  if (S.zona && !zonal) {
+    const zs = [...new Set(dash.data('tiendas').data.filter((t) => t.zona === S.zona && t.status === 'Activo').map((t) => t.zonal))];
+    if (zs.length === 1) zonal = zs[0];
+  }
+  return [S.zona, zonal, S.formato].filter(Boolean).join(' · ');
+}
+
+function datosDxD(list) {
+  const r0 = list[0];
+  const el = r0 ? r0.el : 0, dias = r0 ? r0.dias : 30;
+  const cods = new Set(list.map((r) => r.cod));
+  const per = {};
+  for (const c of cods) per[c] = new Array(el).fill(0);
+  for (const r of dash.data('registros_dia').data) {
+    if (r.mes !== S.mes || !cods.has(r.cod)) continue;
+    const d = +r.day.slice(8);
+    if (d <= el) per[r.cod][d - 1] += r.regs;
+  }
+  const filas = list.map((r) => ({cod: r.cod, nombre: r.nombre, meta: r.meta || 0, md: r.meta > 0 ? r.meta / dias : 0, vals: per[r.cod]}))
+    .map((f) => Object.assign(f, {total: f.vals.reduce((a, b) => a + b, 0)}))
+    .sort((a, b) => b.total - a.total || a.nombre.localeCompare(b.nombre, 'es'));
+  const tot = {cod: '', nombre: 'Total', meta: 0, md: 0, vals: new Array(el).fill(0), total: 0};
+  for (const f of filas) { tot.meta += f.meta; tot.md += f.md; tot.total += f.total; f.vals.forEach((v, i) => { tot.vals[i] += v; }); }
+  return {el, dias, filas, tot};
+}
+function celdaDxD(f, i, acu) {
+  const v = acu ? f.vals.slice(0, i + 1).reduce((a, b) => a + b, 0) : f.vals[i];
+  let k = '';
+  if (f.md > 0) {
+    const rr = v / (f.md * (acu ? i + 1 : 1));
+    k = acu ? (rr >= 1 ? 'ok' : rr >= 0.7 ? 'warn' : 'bad') : (v === 0 ? '0' : rr >= 1 ? 'ok' : '');
+  } else if (v === 0) k = '0';
+  return {v, k};
+}
+
+function drawDxD(list) {
+  const sec = $('#c-dxd');
+  sec.hidden = !filtroZona();
+  if (sec.hidden) return;
+  const D = datosDxD(list), acu = DX.modo === 'acu';
+  DX.D = D;
+  $('#dx-dia').setAttribute('aria-pressed', !acu); $('#dx-acu').setAttribute('aria-pressed', acu);
+  const mesL = MESES_L[+S.mes.slice(5) - 1];
+  $('#dx-note').textContent = tituloFiltro() + ' · del 1 al ' + D.el + ' de ' + mesL + ' · ' + (acu ? 'registros acumulados al cierre de cada día' : 'registros de cada día');
+  $('#dx-leg').textContent = HM ? (acu
+    ? 'Verde: lleva lo esperado a esa fecha o más. Ámbar: entre 70% y 99%. Rojo: menos del 70%.'
+    : 'Verde: ese día llegó a su meta diaria (meta del mes ÷ días del mes). Gris: ningún registro ese día.') : '';
+  const tbl = $('#t-dxd'); tbl.replaceChildren();
+  const thead = document.createElement('thead'), hr = document.createElement('tr');
+  const mk = (tag, txt, cls) => { const e = document.createElement(tag); if (cls) e.className = cls; e.textContent = txt; return e; };
+  hr.appendChild(mk('th', 'Tienda'));
+  for (let i = 1; i <= D.el; i++) {
+    const wd = new Date(Date.UTC(+S.mes.slice(0, 4), +S.mes.slice(5) - 1, i)).getUTCDay();
+    const h = mk('th', String(i)); h.appendChild(mk('span', DSEM[wd].slice(0, 2), 'wd')); hr.appendChild(h);
+  }
+  hr.appendChild(mk('th', 'Acumulado', 'sep'));
+  if (HM) { hr.appendChild(mk('th', 'Meta mes')); hr.appendChild(mk('th', 'Avance')); }
+  thead.appendChild(hr); tbl.appendChild(thead);
+  const tb = document.createElement('tbody');
+  for (const f of [D.tot, ...D.filas]) {
+    const tr = document.createElement('tr'); if (f === D.tot) tr.className = 'tot';
+    const c0 = document.createElement('td');
+    if (f.cod) { const cd = mk('span', f.cod, 'c'); c0.append(cd, document.createTextNode(f.nombre)); } else c0.textContent = f.nombre;
+    c0.title = f.nombre; tr.appendChild(c0);
+    for (let i = 0; i < D.el; i++) { const c = celdaDxD(f, i, acu); tr.appendChild(mk('td', fmt(c.v), c.k ? 'k-' + c.k : '')); }
+    const rr = f.md > 0 ? f.total / (f.md * D.el) : null;
+    tr.appendChild(mk('td', fmt(f.total), 'sep' + (rr == null ? '' : ' k-' + (rr >= 1 ? 'ok' : rr >= 0.7 ? 'warn' : 'bad'))));
+    if (HM) { tr.appendChild(mk('td', f.meta > 0 ? fmt(Math.round(f.meta)) : '—')); tr.appendChild(mk('td', f.meta > 0 ? pc(f.total / f.meta) : '—')); }
+    tb.appendChild(tr);
+  }
+  tbl.appendChild(tb);
+}
+
+// ---------- Imágenes para compartir ----------
+const IMG_FONT = '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+const IMG_COL = {ok: '#17824f', warn: '#b25e00', bad: '#e4002b', na: '#8a8a8a', '0': '#b5b5b5', '': '#111'};
+function lienzo(w, h) {
+  const c = document.createElement('canvas'), k = 2;
+  c.width = w * k; c.height = h * k;
+  const x = c.getContext('2d'); x.scale(k, k);
+  x.fillStyle = '#fff'; x.fillRect(0, 0, w, h);
+  return {c, x};
+}
+function recortar(x, t, w) {
+  t = String(t);
+  if (x.measureText(t).width <= w) return t;
+  while (t.length > 1 && x.measureText(t + '…').width > w) t = t.slice(0, -1);
+  return t + '…';
+}
+function cabeceraImg(x, w, titulo, sub, linea) {
+  x.fillStyle = '#E4002B'; x.fillRect(0, 0, w, 96);
+  x.fillStyle = '#fff'; x.textBaseline = 'alphabetic'; x.textAlign = 'left';
+  x.font = '700 15px ' + IMG_FONT; x.fillText('REGÍSTRATE Y GANA · COOLBOX', 28, 32);
+  x.font = '700 28px ' + IMG_FONT; x.fillText(recortar(x, titulo, w - 56), 28, 70);
+  x.fillStyle = '#111'; x.font = '600 16px ' + IMG_FONT; x.fillText(sub, 28, 128);
+  if (linea) { x.fillStyle = '#555'; x.font = '400 14px ' + IMG_FONT; x.fillText(linea, 28, 152); }
+}
+function pieImg(x, w, h) {
+  x.fillStyle = '#f4f4f4'; x.fillRect(0, h - 40, w, 40);
+  x.fillStyle = '#777'; x.font = '400 12px ' + IMG_FONT; x.textAlign = 'left';
+  x.fillText(($('#rg-upd').textContent || '') + ' · coolbox-tiendas.github.io/registrate-y-gana', 28, h - 15);
+}
+function entregarImagen(canvas, nombre) {
+  canvas.toBlob(async (b) => {
+    const file = new File([b], nombre, {type: 'image/png'});
+    const movil = matchMedia('(pointer: coarse)').matches;
+    if (movil && navigator.canShare && navigator.canShare({files: [file]})) {
+      try { await navigator.share({files: [file], title: nombre}); return; } catch (e) { if (e && e.name === 'AbortError') return; }
+    }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b); a.download = nombre;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  }, 'image/png');
+}
+const nombreArchivo = (pre) => pre + '-' + (S.zona || S.zonal || 'tiendas').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9]+/g, '-').toLowerCase() + '-' + S.mes + (S.dia ? '-' + String(S.dia).padStart(2, '0') : '') + '.png';
+
+function imagenTiendas() {
+  const rows = TT.rows, a = agg(TT.list), mesL = MESES_L[+S.mes.slice(5) - 1];
+  const cols = [{t: 'Tienda', w: 330, al: 'left'}, {t: 'Formato', w: 130, al: 'left'}, {t: 'Registros', w: 100, al: 'right'}];
+  if (HM) cols.push({t: S.dia ? 'Meta día' : 'Meta mes', w: 100, al: 'right'}, {t: 'Avance', w: 170, al: 'right'}, {t: 'Estado', w: 120, al: 'left'});
+  const W = 56 + cols.reduce((s2, c) => s2 + c.w + 16, 0), RH = 34, top = 182, H = top + 40 + rows.length * RH + 60;
+  const {c, x} = lienzo(W, H);
+  const sub = S.dia ? 'Solo el ' + diaLabel(S.mes, S.dia) : 'Del 1 al ' + a.el + ' de ' + mesL;
+  const linea = fmt(rows.length) + ' tiendas · ' + fmt(a.v) + ' registros' + (HM ? ' · meta ' + fmt(Math.round(a.meta)) + ' · avance ' + pc(a.cumpl || 0) + (S.dia ? '' : ' · ritmo ' + pc(a.ritmo || 0)) : '');
+  cabeceraImg(x, W, tituloFiltro() || 'Todas las tiendas', sub, linea);
+  // encabezados
+  let cx = 28; const y0 = top;
+  x.fillStyle = '#111'; x.fillRect(0, y0, W, 34);
+  x.font = '700 13px ' + IMG_FONT; x.fillStyle = '#fff';
+  for (const col of cols) { x.textAlign = col.al; x.fillText(col.t, col.al === 'right' ? cx + col.w : cx, y0 + 22); col.x = cx; cx += col.w + 16; }
+  rows.forEach((r, i) => {
+    const y = y0 + 34 + i * RH;
+    if (i % 2) { x.fillStyle = '#f6f6f6'; x.fillRect(0, y, W, RH); }
+    const yy = y + 22;
+    x.textAlign = 'left'; x.font = '600 12px ' + IMG_FONT; x.fillStyle = '#888'; x.fillText(r.cod, cols[0].x, yy);
+    x.font = '400 14px ' + IMG_FONT; x.fillStyle = '#111'; x.fillText(recortar(x, r.nombre, cols[0].w - 40), cols[0].x + 38, yy);
+    x.fillText(recortar(x, r.formato, cols[1].w), cols[1].x, yy);
+    x.textAlign = 'right'; x.font = '700 14px ' + IMG_FONT; x.fillText(fmt(r.v), cols[2].x + cols[2].w, yy);
+    if (HM) {
+      x.font = '400 14px ' + IMG_FONT;
+      x.fillText(r.meta > 0 ? (S.dia && r.meta < 10 ? d3.format('.1f')(r.meta) : fmt(Math.round(r.meta))) : '—', cols[3].x + cols[3].w, yy);
+      const k = r.st.k, colr = IMG_COL[k] || '#111';
+      if (r.meta > 0) {
+        const bw = 100, bx = cols[4].x, by = y + 13;
+        x.fillStyle = '#e8e8e8'; x.fillRect(bx, by, bw, 8);
+        x.fillStyle = colr; x.fillRect(bx, by, Math.max(2, Math.min(1, r.cumpl || 0) * bw), 8);
+        x.fillStyle = '#111'; x.font = '700 14px ' + IMG_FONT; x.fillText(pc(r.cumpl || 0), cols[4].x + cols[4].w, yy);
+      } else x.fillText('—', cols[4].x + cols[4].w, yy);
+      x.textAlign = 'left'; x.fillStyle = colr;
+      x.beginPath(); x.arc(cols[5].x + 5, yy - 5, 5, 0, Math.PI * 2); x.fill();
+      x.font = '600 14px ' + IMG_FONT; x.fillText(r.st.t, cols[5].x + 16, yy);
+    }
+  });
+  pieImg(x, W, H);
+  entregarImagen(c, nombreArchivo('tiendas'));
+}
+
+function imagenDxD() {
+  const D = DX.D; if (!D) return;
+  const acu = DX.modo === 'acu', mesL = MESES_L[+S.mes.slice(5) - 1];
+  const NW = 230, DW = 40, EW = 92;
+  const extra = HM ? [{t: 'Acumulado', w: EW}, {t: 'Meta mes', w: EW}, {t: 'Avance', w: 76}] : [{t: 'Acumulado', w: EW}];
+  const W = 28 + NW + D.el * DW + extra.reduce((s2, e) => s2 + e.w, 0) + 28, RH = 30, top = 182;
+  const filas = [D.tot, ...D.filas], H = top + 44 + filas.length * RH + 70;
+  const {c, x} = lienzo(Math.max(W, 760), H);
+  const WW = Math.max(W, 760);
+  cabeceraImg(x, WW, tituloFiltro(), (acu ? 'Acumulado día a día' : 'Registros por día') + ' · del 1 al ' + D.el + ' de ' + mesL,
+    fmt(D.filas.length) + ' tiendas · ' + fmt(D.tot.total) + ' registros' + (HM ? ' · meta del mes ' + fmt(Math.round(D.tot.meta)) + ' · avance ' + pc(D.tot.meta ? D.tot.total / D.tot.meta : 0) : ''));
+  const y0 = top;
+  x.fillStyle = '#111'; x.fillRect(0, y0, WW, 44);
+  x.fillStyle = '#fff'; x.font = '700 13px ' + IMG_FONT; x.textAlign = 'left'; x.fillText('Tienda', 28, y0 + 27);
+  x.textAlign = 'right';
+  for (let i = 0; i < D.el; i++) {
+    const wd = new Date(Date.UTC(+S.mes.slice(0, 4), +S.mes.slice(5) - 1, i + 1)).getUTCDay();
+    const xr = 28 + NW + (i + 1) * DW - 6;
+    x.font = '700 13px ' + IMG_FONT; x.fillStyle = '#fff'; x.fillText(String(i + 1), xr, y0 + 20);
+    x.font = '400 10px ' + IMG_FONT; x.fillStyle = '#bbb'; x.fillText(DSEM[wd].slice(0, 2), xr, y0 + 36);
+  }
+  let ex = 28 + NW + D.el * DW;
+  x.fillStyle = '#fff'; x.font = '700 13px ' + IMG_FONT;
+  for (const e of extra) { x.fillText(e.t, ex + e.w - 6, y0 + 27); e.x = ex; ex += e.w; }
+  filas.forEach((f, j) => {
+    const y = y0 + 44 + j * RH, yy = y + 20, tot = f === D.tot;
+    if (tot) { x.fillStyle = '#fde8ec'; x.fillRect(0, y, WW, RH); } else if (j % 2 === 0) { x.fillStyle = '#f6f6f6'; x.fillRect(0, y, WW, RH); }
+    x.textAlign = 'left';
+    if (f.cod) { x.font = '600 11px ' + IMG_FONT; x.fillStyle = '#888'; x.fillText(f.cod, 28, yy); }
+    x.font = (tot ? '700 ' : '400 ') + '13px ' + IMG_FONT; x.fillStyle = '#111';
+    x.fillText(recortar(x, f.nombre, NW - (f.cod ? 46 : 10)), f.cod ? 64 : 28, yy);
+    x.textAlign = 'right';
+    for (let i = 0; i < D.el; i++) {
+      const cc = celdaDxD(f, i, acu);
+      x.font = (cc.k === 'ok' || cc.k === 'warn' || tot ? '700 ' : '400 ') + '13px ' + IMG_FONT;
+      x.fillStyle = IMG_COL[cc.k] || '#111';
+      x.fillText(fmt(cc.v), 28 + NW + (i + 1) * DW - 6, yy);
+    }
+    const rr = f.md > 0 ? f.total / (f.md * D.el) : null;
+    x.font = '700 13px ' + IMG_FONT; x.fillStyle = rr == null ? '#111' : IMG_COL[rr >= 1 ? 'ok' : rr >= 0.7 ? 'warn' : 'bad'];
+    x.fillText(fmt(f.total), extra[0].x + extra[0].w - 6, yy);
+    if (HM) {
+      x.font = '400 13px ' + IMG_FONT; x.fillStyle = '#111';
+      x.fillText(f.meta > 0 ? fmt(Math.round(f.meta)) : '—', extra[1].x + extra[1].w - 6, yy);
+      x.font = '700 13px ' + IMG_FONT; x.fillText(f.meta > 0 ? pc(f.total / f.meta) : '—', extra[2].x + extra[2].w - 6, yy);
+    }
+  });
+  if (HM) {
+    x.textAlign = 'left'; x.font = '400 12px ' + IMG_FONT; x.fillStyle = '#555';
+    x.fillText(acu ? 'Verde: lleva lo esperado a esa fecha o más · Ámbar: 70% a 99% · Rojo: menos del 70%.' : 'Verde: ese día llegó a su meta diaria · Gris: ningún registro ese día.', 28, H - 54);
+  }
+  pieImg(x, WW, H);
+  entregarImagen(c, nombreArchivo(acu ? 'acumulado' : 'dia-a-dia'));
+}
+
 function drawTiendas(list) {
   const q = S.q.trim().toLowerCase();
   let rows = list.filter((r) => !q || (r.cod + ' ' + r.nombre + ' ' + r.zona + ' ' + r.zonal).toLowerCase().includes(q));
@@ -704,6 +932,7 @@ function drawTiendas(list) {
     if (x == null) return 1; if (y == null) return -1;
     return (typeof x === 'string' ? x.localeCompare(y) : x - y) * S.dir;
   });
+  TT.rows = rows; TT.list = list;
   $('#t-note').textContent = fmt(rows.length) + ' tiendas · ordena con los títulos de columna';
   const tbl = $('#t-tiendas');
   tbl.replaceChildren();
@@ -1017,6 +1246,8 @@ function render() {
   kpis(a, ctx); takeaway(a, list, ctx);
   drawDaily(aMes || a); drawAcum(aMes || a);
   drawGroups(list); drawTiendas(list); drawAnio(); drawMatriz();
+  $('#t-img').hidden = !filtroZona();
+  drawDxD(S.dia ? build_mes(ctx) : list);
 }
 
 $('#f-mes').addEventListener('change', (e) => { S.mes = e.target.value; S.dia = 0; render(); });
@@ -1025,6 +1256,10 @@ $('#f-zona').addEventListener('change', (e) => { S.zona = e.target.value; render
 $('#f-zonal').addEventListener('change', (e) => { S.zonal = e.target.value; render(); });
 $('#f-formato').addEventListener('change', (e) => { S.formato = e.target.value; render(); });
 $('#v-zona').addEventListener('click', () => { S.vista = 'zona'; render(); });
+$('#dx-dia').addEventListener('click', () => { DX.modo = 'dia'; render(); });
+$('#dx-acu').addEventListener('click', () => { DX.modo = 'acu'; render(); });
+$('#dx-img').addEventListener('click', imagenDxD);
+$('#t-img').addEventListener('click', imagenTiendas);
 $('#v-zonal').addEventListener('click', () => { S.vista = 'zonal'; render(); });
 $('#f-q').addEventListener('input', (e) => { S.q = e.target.value; drawTiendas(build(context())); });
 $('#an-zona').addEventListener('click', () => { AN.vista = 'zona'; AN.sel = ''; drawAnio(); });
@@ -1037,230 +1272,6 @@ $('#f-mq').addEventListener('input', (e) => { MX.q = e.target.value; drawMatriz(
 $('#lg-a').style.background = dash.colors[0];
 $('#lg-b').style.background = 'var(--cds-chart-muted)';
 $('#lg-c').style.background = dash.colors[0];
-
-// ---------- Resumen para correo ----------
-const DIAS_L = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
-const hoyLima = () => new Date().toLocaleDateString('en-CA', {timeZone: 'America/Lima'});
-const sumarDias = (iso, n) => new Date(Date.UTC(+iso.slice(0, 4), +iso.slice(5, 7) - 1, +iso.slice(8) + n)).toISOString().slice(0, 10);
-const fechaLarga = (iso) => { const d = new Date(iso + 'T12:00:00Z'); return DIAS_L[d.getUTCDay()] + ' ' + d.getUTCDate() + ' de ' + MESES_L[d.getUTCMonth()]; };
-const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
-const pct = (a, b) => b > 0 ? pc(a / b) : '—';
-const MAIL = {dia: '', modo: 'acu'};
-
-function calcResumen(iso) {
-  const mes = iso.slice(0, 7), dN = +iso.slice(8);
-  const dias = new Date(Date.UTC(+mes.slice(0, 4), +mes.slice(5), 0)).getUTCDate();
-  const T = {};
-  for (const t of dash.data('tiendas').data) T[t.cod] = t;
-  const meta = {};
-  for (const m of dash.data('metas').data) if (m.mes === mes && T[m.cod] && T[m.cod].status === 'Activo' && Number(m.meta) > 0) meta[m.cod] = Number(m.meta);
-  const dia = {}, acu = {}, prev = sumarDias(iso, -7);
-  let vPrev = 0;
-  for (const r of dash.data('registros_dia').data) {
-    if (r.day === prev) vPrev += r.regs;
-    if (r.mes !== mes || r.day > iso) continue;
-    acu[r.cod] = (acu[r.cod] || 0) + r.regs;
-    if (r.day === iso) dia[r.cod] = (dia[r.cod] || 0) + r.regs;
-  }
-  const sum = (o) => Object.values(o).reduce((a, b) => a + b, 0);
-  const metaMes = sum(meta), metaDia = metaMes / dias, nMeta = Object.keys(meta).length;
-  const R = {iso, mes, dN, dias, metaMes, metaDia, nMeta, esperado: metaDia * dN, vDia: sum(dia), vAcu: sum(acu), vPrev,
-    conReg: Object.values(dia).filter((v) => v > 0).length,
-    enMeta: Object.keys(meta).filter((c) => (dia[c] || 0) >= meta[c] / dias).length,
-    ceroMes: Object.keys(meta).filter((c) => !acu[c]).length};
-  const Z = {};
-  for (const c of new Set([...Object.keys(meta), ...Object.keys(acu)])) {
-    const t = T[c]; if (!t) continue;
-    const z = Z[t.zonal] || (Z[t.zonal] = {zonal: t.zonal, zona: t.zona, dia: 0, acu: 0, metaDia: 0, tiendas: 0});
-    z.dia += dia[c] || 0; z.acu += acu[c] || 0;
-    if (meta[c]) { z.metaDia += meta[c] / dias; z.tiendas++; }
-  }
-  R.zonales = Object.values(Z).filter((z) => z.tiendas > 0).map((z) => Object.assign(z, {esp: z.metaDia * dN}))
-    .sort((a, b) => (b.acu / (b.esp || 1)) - (a.acu / (a.esp || 1)));
-  const st = {ok: 0, warn: 0, bad: 0};
-  R.tiendasAcu = Object.keys(meta).map((c) => {
-    const esp = meta[c] / dias * dN, rr = (acu[c] || 0) / esp;
-    st[rr >= 1 ? 'ok' : rr >= 0.7 ? 'warn' : 'bad']++;
-    return {cod: c, nombre: T[c].nombre, zonal: T[c].zonal, v: acu[c] || 0, esp, rr};
-  });
-  R.st = st;
-  R.topAcu = Object.keys(acu).filter((c) => T[c] && acu[c] > 0).map((c) => ({cod: c, nombre: T[c].nombre, zonal: T[c].zonal, v: acu[c],
-    esp: meta[c] ? meta[c] / dias * dN : 0})).sort((a, b) => b.v - a.v).slice(0, 10);
-  R.proy = dN ? R.vAcu / dN * dias : 0;
-  R.top = Object.keys(dia).filter((c) => T[c] && dia[c] > 0).map((c) => ({cod: c, nombre: T[c].nombre, zonal: T[c].zonal, v: dia[c], md: meta[c] ? meta[c] / dias : 0}))
-    .sort((a, b) => b.v - a.v).slice(0, 5);
-  return R;
-}
-
-function htmlResumen(R) {
-  const url = location.origin + location.pathname;
-  const th = 'style="text-align:left;padding:6px 10px;background:#E4002B;color:#fff;font-size:13px"';
-  const thr = 'style="text-align:right;padding:6px 10px;background:#E4002B;color:#fff;font-size:13px"';
-  const td = 'style="padding:6px 10px;border-bottom:1px solid #e5e5e5;font-size:13px;text-align:left"';
-  const tdr = 'style="padding:6px 10px;border-bottom:1px solid #e5e5e5;font-size:13px;text-align:right"';
-  const kpi = (t, v, n) => '<td style="padding:12px 16px;background:#f4f4f4;border-left:4px solid #E4002B;vertical-align:top;text-align:left;min-width:150px"><div style="font-size:12px;color:#555">' + t +
-    '</div><div style="font-size:24px;font-weight:bold;margin:2px 0">' + v + '</div><div style="font-size:12px;color:#555">' + n + '</div></td>';
-  const vs = R.vPrev > 0 ? ((R.vDia >= R.vPrev ? '+' : '−') + pc(Math.abs(R.vDia / R.vPrev - 1)) + ' vs. el mismo día de la semana anterior') : '';
-  const porTienda = R.nMeta ? Math.round(R.metaDia / R.nMeta) : 0;
-  let h = '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#111;line-height:1.45">';
-  h += '<p>Hola equipo,</p><p>Este es el resumen de <b>Regístrate y Gana</b> del <b>' + fechaLarga(R.iso) + '</b>:</p>';
-  h += '<table cellpadding="0" cellspacing="8" style="border-collapse:separate"><tr>' +
-    kpi('Registros del día', fmt(R.vDia), R.metaMes ? pct(R.vDia, R.metaDia) + ' de la meta del día (' + fmt(Math.round(R.metaDia)) + ')' : 'en ' + R.conReg + ' tiendas') +
-    kpi('Acumulado de ' + MESES_L[+R.mes.slice(5) - 1], fmt(R.vAcu), R.metaMes ? pct(R.vAcu, R.metaMes) + ' de la meta del mes (' + fmt(Math.round(R.metaMes)) + ')' : '') +
-    (R.metaMes ? kpi('Ritmo a la fecha', pct(R.vAcu, R.esperado), 'esperado al día ' + R.dN + ': ' + fmt(Math.round(R.esperado))) : '') + '</tr></table>';
-  h += '<ul style="padding-left:20px;margin:8px 0">';
-  h += '<li>' + R.conReg + ' tiendas registraron clientes ese día' + (vs ? ' (' + vs + ').' : '.') + '</li>';
-  if (R.metaMes) h += '<li>' + R.enMeta + ' de ' + R.nMeta + ' tiendas llegaron a su meta del día.</li>';
-  if (R.metaMes && R.ceroMes) h += '<li><b>' + R.ceroMes + ' tiendas todavía no registran a nadie en el mes.</b> ¡Activemos el QR en caja!</li>';
-  h += '</ul>';
-  if (R.zonales.length && R.metaMes) {
-    h += '<p style="margin:16px 0 6px"><b>Avance por zonal</b> (acumulado del mes contra lo esperado a la fecha)</p>';
-    h += '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;min-width:520px"><tr><th ' + th + '>Zonal</th><th ' + th + '>Zona</th><th ' + thr + '>Del día</th><th ' + thr + '>Acumulado</th><th ' + thr + '>Ritmo</th></tr>';
-    for (const z of R.zonales) {
-      const rr = z.esp ? z.acu / z.esp : 0, col = rr >= 1 ? '#17824f' : rr >= 0.7 ? '#b25e00' : '#e4002b';
-      h += '<tr><td ' + td + '>' + esc(z.zonal) + '</td><td ' + td + '>' + esc(z.zona) + '</td><td ' + tdr + '>' + fmt(z.dia) + '</td><td ' + tdr + '>' + fmt(z.acu) +
-        '</td><td style="padding:6px 10px;border-bottom:1px solid #e5e5e5;font-size:13px;text-align:right;font-weight:bold;color:' + col + '">' + pct(z.acu, z.esp) + '</td></tr>';
-    }
-    h += '</table>';
-  }
-  if (R.top.length) {
-    h += '<p style="margin:16px 0 6px"><b>Top ' + R.top.length + ' tiendas del día</b> 👏</p>';
-    h += '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;min-width:520px"><tr><th ' + th + '>Tienda</th><th ' + th + '>Zonal</th><th ' + thr + '>Registros</th>' + (R.metaMes ? '<th ' + thr + '>De su meta del día</th>' : '') + '</tr>';
-    for (const t of R.top) h += '<tr><td ' + td + '>' + esc(t.nombre) + ' (' + t.cod + ')</td><td ' + td + '>' + esc(t.zonal) + '</td><td ' + tdr + '>' + fmt(t.v) + '</td>' + (R.metaMes ? '<td ' + tdr + '>' + pct(t.v, t.md) + '</td>' : '') + '</tr>';
-    h += '</table>';
-  }
-  if (porTienda) h += '<p style="margin-top:16px">Recuerden: la meta equivale a unos <b>' + porTienda + ' registros por tienda al día</b>. Cada cliente cuenta.</p>';
-  h += '<p>Revisen el avance de su tienda y descarguen su QR aquí: <a href="' + url + '" style="color:#E4002B">' + url + '</a></p><p>Saludos,</p></div>';
-  return h;
-}
-
-function htmlAcumulado(R) {
-  const url = location.origin + location.pathname, mesL = MESES_L[+R.mes.slice(5) - 1];
-  const th = 'style="text-align:left;padding:6px 10px;background:#E4002B;color:#fff;font-size:13px"';
-  const thr = 'style="text-align:right;padding:6px 10px;background:#E4002B;color:#fff;font-size:13px"';
-  const td = 'style="padding:6px 10px;border-bottom:1px solid #e5e5e5;font-size:13px;text-align:left"';
-  const tdr = 'style="padding:6px 10px;border-bottom:1px solid #e5e5e5;font-size:13px;text-align:right"';
-  const col = (rr) => rr >= 1 ? '#17824f' : rr >= 0.7 ? '#b25e00' : '#e4002b';
-  const tdc = (rr, t) => '<td style="padding:6px 10px;border-bottom:1px solid #e5e5e5;font-size:13px;text-align:right;font-weight:bold;color:' + col(rr) + '">' + t + '</td>';
-  const kpi = (t, v, n) => '<td style="padding:12px 16px;background:#f4f4f4;border-left:4px solid #E4002B;vertical-align:top;text-align:left;min-width:150px"><div style="font-size:12px;color:#555">' + t +
-    '</div><div style="font-size:24px;font-weight:bold;margin:2px 0">' + v + '</div><div style="font-size:12px;color:#555">' + n + '</div></td>';
-  const HMm = R.metaMes > 0;
-  let h = '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#111;line-height:1.45">';
-  h += '<p>Hola equipo,</p><p>Así vamos en <b>Regístrate y Gana</b> en los primeros <b>' + R.dN + ' días de ' + mesL + '</b> (del 1 al ' + R.dN + ' de ' + mesL + '):</p>';
-  h += '<table cellpadding="0" cellspacing="8" style="border-collapse:separate"><tr>' +
-    kpi('Registros acumulados', fmt(R.vAcu), HMm ? pct(R.vAcu, R.metaMes) + ' de la meta del mes (' + fmt(Math.round(R.metaMes)) + ')' : 'del 1 al ' + R.dN + ' de ' + mesL) +
-    (HMm ? kpi('Ritmo a la fecha', pct(R.vAcu, R.esperado), 'esperado al día ' + R.dN + ': ' + fmt(Math.round(R.esperado))) : '') +
-    kpi('Promedio por día', fmt(Math.round(R.vAcu / (R.dN || 1))), HMm ? 'meta diaria: ' + fmt(Math.round(R.metaDia)) : '') +
-    (HMm ? kpi('Proyección al cierre', fmt(Math.round(R.proy)), pct(R.proy, R.metaMes) + ' de la meta si seguimos así') : '') + '</tr></table>';
-  if (HMm) {
-    h += '<ul style="padding-left:20px;margin:8px 0">';
-    h += '<li><b style="color:#17824f">' + R.st.ok + (R.st.ok === 1 ? ' tienda</b> va' : ' tiendas</b> van') + ' al ritmo de su meta, <b style="color:#b25e00">' + R.st.warn + '</b> están en riesgo (70% a 99%) y <b style="color:#e4002b">' + R.st.bad + '</b> están rezagadas (menos del 70%).</li>';
-    if (R.ceroMes) h += '<li><b>' + R.ceroMes + ' tiendas todavía no registran a nadie en el mes.</b> ¡Activemos el QR en caja!</li>';
-    const falta = Math.max(0, R.metaMes - R.vAcu), quedan = R.dias - R.dN;
-    if (quedan > 0 && falta > 0) h += '<li>Para llegar a la meta faltan <b>' + fmt(Math.round(falta)) + ' registros</b> en ' + quedan + ' días: unos <b>' + fmt(Math.round(falta / quedan)) + ' por día</b>.</li>';
-    h += '</ul>';
-  }
-  if (R.zonales.length && HMm) {
-    h += '<p style="margin:16px 0 6px"><b>Avance por zonal</b> (del 1 al ' + R.dN + ' de ' + mesL + ')</p>';
-    h += '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;min-width:560px"><tr><th ' + th + '>Zonal</th><th ' + th + '>Zona</th><th ' + thr + '>Acumulado</th><th ' + thr + '>Esperado</th><th ' + thr + '>Ritmo</th><th ' + thr + '>Avance meta mes</th></tr>';
-    for (const z of R.zonales) {
-      const rr = z.esp ? z.acu / z.esp : 0;
-      h += '<tr><td ' + td + '>' + esc(z.zonal) + '</td><td ' + td + '>' + esc(z.zona) + '</td><td ' + tdr + '>' + fmt(z.acu) + '</td><td ' + tdr + '>' + fmt(Math.round(z.esp)) + '</td>' +
-        tdc(rr, pct(z.acu, z.esp)) + '<td ' + tdr + '>' + pct(z.acu, z.metaDia * R.dias) + '</td></tr>';
-    }
-    h += '</table>';
-  }
-  if (R.topAcu.length) {
-    h += '<p style="margin:16px 0 6px"><b>Top ' + R.topAcu.length + ' tiendas del mes</b> 👏</p>';
-    h += '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;min-width:560px"><tr><th ' + th + '>#</th><th ' + th + '>Tienda</th><th ' + th + '>Zonal</th><th ' + thr + '>Acumulado</th>' + (HMm ? '<th ' + thr + '>Ritmo</th>' : '') + '</tr>';
-    R.topAcu.forEach((t, i) => {
-      h += '<tr><td ' + td + '>' + (i + 1) + '</td><td ' + td + '>' + esc(t.nombre) + ' (' + t.cod + ')</td><td ' + td + '>' + esc(t.zonal) + '</td><td ' + tdr + '>' + fmt(t.v) + '</td>' +
-        (HMm ? (t.esp ? tdc(t.v / t.esp, pct(t.v, t.esp)) : '<td ' + tdr + '>—</td>') : '') + '</tr>';
-    });
-    h += '</table>';
-  }
-  const porTienda = R.nMeta ? Math.round(R.metaDia / R.nMeta) : 0;
-  if (porTienda) h += '<p style="margin-top:16px">Recuerden: la meta equivale a unos <b>' + porTienda + ' registros por tienda al día</b>. Cada cliente cuenta.</p>';
-  h += '<p>Revisen el avance de su tienda y descarguen su QR aquí: <a href="' + url + '" style="color:#E4002B">' + url + '</a></p><p>Saludos,</p></div>';
-  return h;
-}
-
-function textoAcumulado(R) {
-  const mesL = MESES_L[+R.mes.slice(5) - 1];
-  const L = ['Hola equipo,', '', 'Así vamos en Regístrate y Gana del 1 al ' + R.dN + ' de ' + mesL + ':', '',
-    '- Registros acumulados: ' + fmt(R.vAcu) + (R.metaMes ? ' (' + pct(R.vAcu, R.metaMes) + ' de la meta del mes; ritmo ' + pct(R.vAcu, R.esperado) + ')' : ''),
-    '- Promedio por día: ' + fmt(Math.round(R.vAcu / (R.dN || 1))) + (R.metaMes ? ' (meta diaria ' + fmt(Math.round(R.metaDia)) + ')' : '')];
-  if (R.metaMes) L.push('- ' + R.st.ok + (R.st.ok === 1 ? ' tienda' : ' tiendas') + ' al ritmo, ' + R.st.warn + ' en riesgo y ' + R.st.bad + ' rezagadas.');
-  if (R.topAcu.length) { L.push('', 'Top tiendas del mes:'); R.topAcu.forEach((t, i) => L.push((i + 1) + '. ' + t.nombre + ' (' + t.cod + '): ' + fmt(t.v))); }
-  L.push('', 'Dashboard: ' + location.origin + location.pathname, '', 'Saludos,');
-  return L.join('\n');
-}
-
-function textoResumen(R) {
-  const L = ['Hola equipo,', '', 'Resumen de Regístrate y Gana del ' + fechaLarga(R.iso) + ':', '',
-    '- Registros del día: ' + fmt(R.vDia) + (R.metaMes ? ' (' + pct(R.vDia, R.metaDia) + ' de la meta del día)' : ''),
-    '- Acumulado del mes: ' + fmt(R.vAcu) + (R.metaMes ? ' (' + pct(R.vAcu, R.metaMes) + ' de la meta; ritmo ' + pct(R.vAcu, R.esperado) + ')' : ''),
-    '- ' + R.conReg + ' tiendas registraron clientes' + (R.metaMes ? '; ' + R.enMeta + ' llegaron a su meta del día' : '') + '.'];
-  if (R.top.length) { L.push('', 'Top tiendas del día:'); R.top.forEach((t, i) => L.push((i + 1) + '. ' + t.nombre + ' (' + t.cod + '): ' + fmt(t.v))); }
-  L.push('', 'Dashboard: ' + location.origin + location.pathname, '', 'Saludos,');
-  return L.join('\n');
-}
-
-function mostrarResumen() {
-  if (!MAIL.dia) return;
-  const R = calcResumen(MAIL.dia);
-  MAIL.R = R;
-  const acu = MAIL.modo === 'acu';
-  $('#f-mail-l').textContent = acu ? 'Hasta el día' : 'Día del resumen';
-  $('#mail-subj').textContent = acu ? 'Regístrate y Gana | Así vamos del 1 al ' + R.dN + ' de ' + MESES_L[+R.mes.slice(5) - 1]
-    : 'Regístrate y Gana | Resumen del ' + fechaLarga(R.iso);
-  $('#mail-prev').innerHTML = acu ? htmlAcumulado(R) : htmlResumen(R);
-}
-
-function initMail() {
-  const hoy = hoyLima(), sel = $('#f-mail');
-  if (!sel.options.length) {
-    for (let i = 1; i <= 14; i++) {
-      const d = sumarDias(hoy, -i);
-      const o = document.createElement('option'); o.value = d; o.textContent = (i === 1 ? 'Ayer · ' : '') + fechaLarga(d); sel.append(o);
-    }
-    const o0 = document.createElement('option'); o0.value = hoy; o0.textContent = 'Hoy (parcial) · ' + fechaLarga(hoy); sel.prepend(o0);
-    MAIL.dia = sumarDias(hoy, -1); sel.value = MAIL.dia;
-  }
-  mostrarResumen();
-}
-
-async function copiar(html, txt) {
-  try {
-    if (html && window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
-      await navigator.clipboard.write([new ClipboardItem({'text/html': new Blob([html], {type: 'text/html'}), 'text/plain': new Blob([txt], {type: 'text/plain'})})]);
-      return true;
-    }
-    if (!html && navigator.clipboard && navigator.clipboard.writeText) { await navigator.clipboard.writeText(txt); return true; }
-  } catch (e) { /* respaldo abajo */ }
-  try {
-    const n = html ? $('#mail-prev') : Object.assign(document.createElement('textarea'), {value: txt});
-    if (!html) document.body.appendChild(n);
-    const rg = document.createRange(); rg.selectNodeContents(n);
-    const se = getSelection(); se.removeAllRanges();
-    if (html) se.addRange(rg); else n.select();
-    const ok = document.execCommand('copy'); se.removeAllRanges();
-    if (!html) n.remove();
-    return ok;
-  } catch (e) { return false; }
-}
-function avisar(ok) {
-  $('#mail-ok').textContent = ok ? '¡Copiado! Pégalo en Outlook con Ctrl + V.' : 'No se pudo copiar. Selecciona el texto de abajo y cópialo con Ctrl + C.';
-  clearTimeout(MAIL.t); MAIL.t = setTimeout(() => { $('#mail-ok').textContent = ''; }, 5000);
-}
-$('#f-mail').addEventListener('change', (e) => { MAIL.dia = e.target.value; mostrarResumen(); });
-$('#mail-cs').addEventListener('click', async () => avisar(await copiar('', $('#mail-subj').textContent)));
-$('#mail-cb').addEventListener('click', async () => {
-  if (!MAIL.R) return;
-  const acu = MAIL.modo === 'acu';
-  avisar(await copiar(acu ? htmlAcumulado(MAIL.R) : htmlResumen(MAIL.R), acu ? textoAcumulado(MAIL.R) : textoResumen(MAIL.R)));
-});
-$('#f-mail-modo').addEventListener('change', (e) => { MAIL.modo = e.target.value; mostrarResumen(); });
 
 // ---------- QR de tienda ----------
 const QR_BASE = 'https://www.coolbox.pe/registrate-actualiza-y-gana?origin=';
@@ -1413,8 +1424,7 @@ async function cargar() {
 }
 cargar().then(() => {
   dash.onData(render);
-  dash.onData(initMail);
   initQR();
-  setInterval(() => { cargar().then(() => { render(); mostrarResumen(); }).catch(() => {}); }, 120000);
+  setInterval(() => { cargar().then(render).catch(() => {}); }, 120000);
 }).catch(() => { $('#rg-take').textContent = 'No se pudieron cargar los datos. Intenta recargar la página en unos minutos.'; });
 </script>
