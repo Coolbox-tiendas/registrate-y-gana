@@ -68,6 +68,18 @@ padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-
 #t-dxd .k-bad{color:var(--color-bad)}
 #t-dxd .k-0{color:var(--color-fg-muted);opacity:.6}
 .rg-acts{display:flex;gap:var(--cds-gap-md);align-items:end;flex-wrap:wrap}
+.top-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,auto);grid-auto-flow:column;column-gap:var(--cds-gap-lg)}
+@container (max-width:760px){.top-list{grid-template-columns:1fr;grid-auto-flow:row;grid-template-rows:none}}
+.top-list li{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--color-border-line)}
+.top-n{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:15px;background:var(--cds-chart-grid);color:var(--color-fg)}
+.top-n.p1{background:#f5b800;color:#111}.top-n.p2{background:#c4c8cc;color:#111}.top-n.p3{background:#d18a4f;color:#111}
+.top-nm{font-weight:600;font-size:var(--cds-font-size-body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top-nm .c{font-weight:400;color:var(--color-fg-muted);font-size:var(--cds-font-size-caption);margin-right:6px}
+.top-sub{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top-v{text-align:right;white-space:nowrap}
+.top-v strong{display:block;font-size:20px;line-height:1.1;font-variant-numeric:tabular-nums}
+.top-v span{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.top-empty{color:var(--color-fg-muted);font-size:var(--cds-font-size-body);padding:12px 0}
 .rg-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--cds-gap-md);align-items:flex-start;margin-bottom:var(--cds-gap-sm)}
 .rg-seg{display:inline-flex;border:1px solid var(--color-border-line);border-radius:var(--cds-radius);overflow:hidden}
 .rg-seg button{font:inherit;font-size:var(--cds-font-size-caption);background:transparent;color:var(--color-fg-muted);border:0;padding:6px 12px;cursor:pointer}
@@ -151,6 +163,20 @@ padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-
       <div class="rg-leg"><span><i id="lg-c"></i>Acumulado real</span><span><i id="lg-d" style="background:var(--cds-chart-reference)"></i>Ruta a la meta</span></div>
     </section>
   </div>
+
+  <section class="rg-card" id="c-top">
+    <div class="rg-head">
+      <div><h2>Top 10 tiendas</h2><p class="rg-note" style="margin:2px 0 0" id="top-note"></p></div>
+      <div class="rg-acts">
+        <div class="rg-seg" role="group" aria-label="Ordenar el top por">
+          <button type="button" id="tp-reg" aria-pressed="true">Más registros</button>
+          <button type="button" id="tp-av" aria-pressed="false">Mejor avance de meta</button>
+        </div>
+        <button type="button" class="rg-btn" id="tp-img">Descargar imagen</button>
+      </div>
+    </div>
+    <ol class="top-list" id="top-list"></ol>
+  </section>
 
   <section class="rg-card" id="c-grupo">
     <div class="rg-head">
@@ -922,6 +948,77 @@ function imagenDxD() {
   entregarImagen(c, nombreArchivo(acu ? 'acumulado' : 'dia-a-dia'));
 }
 
+const TP = {modo: 'reg', rows: []};
+function topRows(list) {
+  const av = TP.modo === 'av' && HM;
+  return list.filter((r) => av ? r.meta > 0 && r.v > 0 : r.v > 0)
+    .sort((a, b) => av ? (b.cumpl - a.cumpl) || (b.v - a.v) : (b.v - a.v) || ((b.cumpl || 0) - (a.cumpl || 0)))
+    .slice(0, 10);
+}
+function periodoTxt(list) {
+  const mesL = MESES_L[+S.mes.slice(5) - 1], el = list[0] ? list[0].el : 0;
+  return S.dia ? 'solo el ' + diaLabel(S.mes, S.dia) : 'del 1 al ' + el + ' de ' + mesL;
+}
+function drawTop(list) {
+  const av = TP.modo === 'av' && HM;
+  $('#tp-av').hidden = !HM;
+  $('#tp-reg').setAttribute('aria-pressed', !av); $('#tp-av').setAttribute('aria-pressed', av);
+  const rows = topRows(list); TP.rows = rows; TP.list = list;
+  $('#top-note').textContent = (tituloFiltro() || 'Todas las tiendas') + ' · ' + periodoTxt(list) + ' · ' +
+    (av ? 'ordenado por avance sobre su meta' : 'ordenado por cantidad de registros');
+  const ol = $('#top-list'); ol.replaceChildren();
+  if (!rows.length) { const p = document.createElement('li'); p.className = 'top-empty'; p.textContent = 'Todavía no hay tiendas con registros en este periodo.'; ol.appendChild(p); return; }
+  rows.forEach((r, i) => {
+    const li = document.createElement('li');
+    const n = document.createElement('span'); n.className = 'top-n' + (i < 3 ? ' p' + (i + 1) : ''); n.textContent = i + 1;
+    const mid = document.createElement('div');
+    const nm = document.createElement('div'); nm.className = 'top-nm'; nm.title = r.nombre;
+    const cd = document.createElement('span'); cd.className = 'c'; cd.textContent = r.cod;
+    nm.append(cd, document.createTextNode(r.nombre));
+    const sub = document.createElement('div'); sub.className = 'top-sub'; sub.textContent = r.zona + ' · ' + r.zonal;
+    mid.append(nm, sub);
+    if (HM && r.meta > 0) {
+      const bw = document.createElement('div'); bw.style.marginTop = '4px';
+      const bar = document.createElement('span'); bar.className = 'rg-bar ' + r.st.k;
+      const b = document.createElement('b'); b.style.width = Math.min(100, (r.cumpl || 0) * 100) + '%'; bar.appendChild(b);
+      const t = document.createElement('span'); t.className = 'top-sub'; t.textContent = pc(r.cumpl || 0) + ' de su meta';
+      bw.append(bar, t); mid.appendChild(bw);
+    }
+    const val = document.createElement('div'); val.className = 'top-v';
+    const st = document.createElement('strong'); st.textContent = av ? pc(r.cumpl) : fmt(r.v);
+    const ss = document.createElement('span'); ss.textContent = av ? fmt(r.v) + ' registros' : 'registros';
+    val.append(st, ss);
+    li.append(n, mid, val); ol.appendChild(li);
+  });
+}
+function imagenTop() {
+  const rows = TP.rows; if (!rows.length) return;
+  const av = TP.modo === 'av' && HM, W = 900, RH = 64, top = 182, H = top + 20 + rows.length * RH + 60;
+  const {c, x} = lienzo(W, H);
+  cabeceraImg(x, W, 'Top ' + rows.length + ' tiendas', (tituloFiltro() || 'Todas las tiendas') + ' · ' + periodoTxt(TP.list),
+    av ? 'Ordenado por avance sobre su meta' : 'Ordenado por cantidad de registros');
+  const medal = ['#f5b800', '#c4c8cc', '#d18a4f'];
+  rows.forEach((r, i) => {
+    const y = top + 10 + i * RH, cy = y + RH / 2;
+    if (i % 2 === 0) { x.fillStyle = '#f6f6f6'; x.fillRect(0, y, W, RH); }
+    x.fillStyle = medal[i] || '#e5e5e5'; x.beginPath(); x.arc(52, cy, 20, 0, Math.PI * 2); x.fill();
+    x.fillStyle = '#111'; x.font = '800 17px ' + IMG_FONT; x.textAlign = 'center'; x.fillText(String(i + 1), 52, cy + 6);
+    x.textAlign = 'left'; x.font = '700 17px ' + IMG_FONT; x.fillText(recortar(x, r.nombre, 430), 92, cy - 4);
+    x.font = '400 13px ' + IMG_FONT; x.fillStyle = '#777'; x.fillText(r.cod + ' · ' + r.zona + ' · ' + r.zonal, 92, cy + 17);
+    if (HM && r.meta > 0) {
+      const colr = IMG_COL[r.st.k] || '#111', bx = 560, bw = 140;
+      x.fillStyle = '#e5e5e5'; x.fillRect(bx, cy - 4, bw, 8);
+      x.fillStyle = colr; x.fillRect(bx, cy - 4, Math.max(2, Math.min(1, r.cumpl || 0) * bw), 8);
+      x.fillStyle = colr; x.font = '700 14px ' + IMG_FONT; x.fillText(pc(r.cumpl || 0), bx, cy + 22);
+      x.fillStyle = '#777'; x.font = '400 12px ' + IMG_FONT; x.fillText('de su meta', bx + x.measureText(pc(r.cumpl || 0)).width + 8, cy + 22);
+    }
+    x.textAlign = 'right'; x.fillStyle = '#111'; x.font = '800 24px ' + IMG_FONT; x.fillText(fmt(r.v), W - 32, cy + 4);
+    x.font = '400 12px ' + IMG_FONT; x.fillStyle = '#777'; x.fillText('registros', W - 32, cy + 22);
+  });
+  pieImg(x, W, H);
+  entregarImagen(c, nombreArchivo('top10'));
+}
+
 function drawTiendas(list) {
   const q = S.q.trim().toLowerCase();
   let rows = list.filter((r) => !q || (r.cod + ' ' + r.nombre + ' ' + r.zona + ' ' + r.zonal).toLowerCase().includes(q));
@@ -1245,7 +1342,7 @@ function render() {
   $('#note-d').textContent = (HM ? 'Barras por día; la línea punteada es la meta diaria (meta del mes ÷ días del mes).' : 'Registros de DNI únicos por día. La meta solo existe para el mes en curso.') + ' Toca una barra para ver solo ese día.';
   kpis(a, ctx); takeaway(a, list, ctx);
   drawDaily(aMes || a); drawAcum(aMes || a);
-  drawGroups(list); drawTiendas(list); drawAnio(); drawMatriz();
+  drawTop(list); drawGroups(list); drawTiendas(list); drawAnio(); drawMatriz();
   $('#t-img').hidden = !filtroZona();
   drawDxD(S.dia ? build_mes(ctx) : list);
 }
@@ -1259,6 +1356,9 @@ $('#v-zona').addEventListener('click', () => { S.vista = 'zona'; render(); });
 $('#dx-dia').addEventListener('click', () => { DX.modo = 'dia'; render(); });
 $('#dx-acu').addEventListener('click', () => { DX.modo = 'acu'; render(); });
 $('#dx-img').addEventListener('click', imagenDxD);
+$('#tp-reg').addEventListener('click', () => { TP.modo = 'reg'; render(); });
+$('#tp-av').addEventListener('click', () => { TP.modo = 'av'; render(); });
+$('#tp-img').addEventListener('click', imagenTop);
 $('#t-img').addEventListener('click', imagenTiendas);
 $('#v-zonal').addEventListener('click', () => { S.vista = 'zonal'; render(); });
 $('#f-q').addEventListener('input', (e) => { S.q = e.target.value; drawTiendas(build(context())); });
